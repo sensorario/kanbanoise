@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table table-bordered" data-fixed-columns="true">
+      <thead>
+        <tr>
+            {% for status in statuses %}
+              <th style="width: {{100/(statuses|length)}}%;" class="text-center">{{ status.name }}</th>
+            {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bg-danger">
+        {% for status in statuses %}
+            <td class="p-2">
+                {% for card in bugs[status.name] %}
+                    {% include 'card/_card.html.twig' with {'card' : card} %}
+                {% endfor %}
+            </td>
+        {% endfor %}
+        </tr>
+        <tr>
+        {% for status in statuses %}
+            <td class="p-2">
+                {% for card in cards[status.name] %}
+                    {% include 'card/_card.html.twig' with {'card' : card} %}
+                {% endfor %}
+            </td>
+        {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+{% endblock %}

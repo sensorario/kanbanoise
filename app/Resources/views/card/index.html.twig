@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cards</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for card in cards %}
+            <tr>
+                <td><a href="{{ path('card_show', { 'id': card.id }) }}">{{ card.id }}</a></td>
+                <td>{{ card.title }}</td>
+                <td>{{ card.description }}</td>
+                <td>{{ card.status }}</td>
+                <td>{{ card.type }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('card_show', { 'id': card.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('card_edit', { 'id': card.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('card_new') }}">Create a new card</a>
+        </li>
+    </ul>
+{% endblock %}

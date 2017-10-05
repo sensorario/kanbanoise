@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Card creation</h1>
+
+    <form name="appbundle_card" method="post">
+        <div id="appbundle_card">
+            <div>
+                <label for="appbundle_card" class="required">Title</label>
+                <input type="text" id="appbundle_card" name="appbundle_card[title]" required="required" maxlength="255">
+            </div>
+            <div>
+                <label for="appbundle_card" class="required">Description</label><textarea id="appbundle_card" name="appbundle_card[description]" required="required"></textarea>
+            </div>
+            <div>
+                <label for="appbundle_card_type" class="required">Type</label>
+                {% for type in types %}
+                    <input type="radio" value="{{type.name}}" name="appbundle_card[type]"
+                    {% if type.name == 'task'%}checked="checked"{% endif %}> {{type.name}}
+                {% endfor %}
+            </div>
+            <div>
+                <label for="appbundle_card" class="required">Status</label>
+                {% for status in statuses %}
+                    <input type="radio" value="{{status.name}}" name="appbundle_card[status]"
+                    {% if status.name == 'backlog'%}checked="checked"{% endif %}> {{status.name}}
+                {% endfor %}
+            </div>
+            {{ form_row(form._token) }}
+        </div>
+        <input type="submit" value="Create">
+    </form>
+
+    <ul>
+        <li>
+            <a href="{{ path('card_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}
