@@ -136,6 +136,15 @@ class CardController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $cardInStatus = $entityManager->getRepository('AppBundle:Card')->findby(['status' => $card->getStatus()]);
+            $status = $entityManager->getRepository('AppBundle:Status')->findOneBy(['name' => $card->getStatus()]);
+            $numberOfCardInCurrentStatus = count($cardInStatus);
+            $limitOfCard = $status->getWipLimit();
+            $postStatus = $request->request->get('appbundle_card')['status'];
+            if ($limitOfCard <= $numberOfCardInCurrentStatus) {
+                return $this->redirectToRoute('kanban');
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($card);
             $em->flush();
@@ -186,7 +195,20 @@ class CardController extends Controller
         $editForm = $this->createForm('AppBundle\Form\CardType', $card);
         $editForm->handleRequest($request);
 
+
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+
+            $cardInStatus = $entityManager->getRepository('AppBundle:Card')->findby(['status' => $card->getStatus()]);
+            $status = $entityManager->getRepository('AppBundle:Status')->findOneBy(['name' => $card->getStatus()]);
+            $numberOfCardInCurrentStatus = count($cardInStatus);
+            $limitOfCard = $status->getWipLimit();
+            $postStatus = $request->request->get('appbundle_card')['status'];
+            if ($limitOfCard <= $numberOfCardInCurrentStatus) {
+                return $this->redirectToRoute('kanban');
+            }
+
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('kanban');

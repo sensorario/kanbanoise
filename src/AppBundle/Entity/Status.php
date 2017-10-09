@@ -27,6 +27,11 @@ class Status
      */
     private $position;
 
+    /**
+     * @ORM\Column(name="wip_limit", type="integer", nullable=true)
+     */
+    private $wipLimit;
+
     public function getId()
     {
         return $this->id;
@@ -54,6 +59,18 @@ class Status
     public function getPosition()
     {
         return $this->position;
+    }
+
+    public function setWipLimit($wipLimit)
+    {
+        $this->wipLimit = $wipLimit;
+
+        return $this;
+    }
+
+    public function getWipLimit()
+    {
+        return $this->wipLimit;
     }
 }
 

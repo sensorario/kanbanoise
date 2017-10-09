@@ -5,7 +5,11 @@
       <thead>
         <tr>
             {% for status in statuses %}
-              <th style="width: {{100/(statuses|length)}}%;" class="text-center">{{ status.name }}</th>
+                {% if status.wipLimit is null %}
+                  <th style="width: {{100/(statuses|length)}}%;" class="text-center">{{ status.name }}</th>
+                {% else %}
+                  <th style="width: {{100/(statuses|length)}}%;" class="text-center">{{ status.name }} ({{ status.wipLimit}})</th>
+                {% endif %}
             {% endfor %}
         </tr>
       </thead>
