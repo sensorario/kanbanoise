@@ -1,9 +1,4 @@
-<div class="card m-1">
-    <div class="card-header p-1">#{{card.id}} - {{card.title}}</div>
+<div class="card m-1 draggable">
+    <div class="card-header p-1"><a href="{{ url('card_edit', {'id':card.id}) }}">#{{card.id}} - {{card.title}}</a></div>
     <div class="card-text p-1">{{card.description}}</div>
-    <div class="card-footer text-center p-1">
-        <a href="{{ url('card_regress', {'card':card.id}) }}">&lt;&lt;</a>
-        [ <a href="{{ url('card_edit', {'id':card.id}) }}">edit</a> ]
-        <a href="{{ url('card_progress', {'card':card.id}) }}">&gt;&gt;</a>
-    </div>
 </div>
