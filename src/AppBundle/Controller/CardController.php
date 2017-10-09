@@ -189,7 +189,7 @@ class CardController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('card_edit', array('id' => $card->getId()));
+            return $this->redirectToRoute('kanban');
         }
 
         $statuses = $entityManager
