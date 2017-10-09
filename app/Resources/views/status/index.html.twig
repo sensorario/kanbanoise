@@ -9,6 +9,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Position</th>
+                <th>Wip Limit</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -18,6 +19,7 @@
                 <td><a href="{{ path('status_show', { 'id': status.id }) }}">{{ status.id }}</a></td>
                 <td>{{ status.name }}</td>
                 <td>{{ status.position }}</td>
+                <td>{{ status.wipLimit is null ? 'no limit' : status.wipLimit }}</td>
                 <td>
                     <ul>
                         <li>
