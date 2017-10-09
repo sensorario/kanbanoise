@@ -21,6 +21,9 @@
     },
     "require": {
         "php": ">=5.5.9",
+        "behat/behat": "^3.4",
+        "behat/mink-extension": "^2.2",
+        "behat/mink-goutte-driver": "^1.2",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
         "incenteev/composer-parameter-handler": "^2.0",
@@ -53,7 +56,8 @@
         ]
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "bin-dir": "bin"
     },
     "extra": {
         "symfony-app-dir": "app",
