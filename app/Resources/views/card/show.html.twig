@@ -1,9 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Card</h1>
 
-    <table>
+    <ul>
+        <li>
+            <a href="{{ path('card_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('card_edit', { 'id': card.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+
+    <table class="table table-bordered">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -21,20 +34,11 @@
                 <th>Status</th>
                 <td>{{ card.status }}</td>
             </tr>
+            <tr>
+                <th>Owner</th>
+                <td>{{ card.member is null ? 'not yet assigned' : card.member }}</td>
+            </tr>
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('card_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('card_edit', { 'id': card.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
 {% endblock %}

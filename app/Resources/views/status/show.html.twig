@@ -1,20 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Status</h1>
-
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ status.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ status.name }}</td>
-            </tr>
-        </tbody>
-    </table>
 
     <ul>
         <li>
@@ -29,4 +15,18 @@
             {{ form_end(delete_form) }}
         </li>
     </ul>
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ status.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ status.name }}</td>
+            </tr>
+        </tbody>
+    </table>
+
 {% endblock %}

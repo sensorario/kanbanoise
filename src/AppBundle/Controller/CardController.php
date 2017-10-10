@@ -82,7 +82,7 @@ class CardController extends Controller
             ->findAll();
 
         $tasks = [];
-        $bugs§ = [];
+        $bugs = [];
         foreach ($statuses as $status) {
             $tasks[$status->getName()] = $manager
                 ->getRepository('AppBundle:Card')
@@ -160,8 +160,13 @@ class CardController extends Controller
             ->getRepository('AppBundle:CardType')
             ->findAll();
 
+        $members = $entityManager
+            ->getRepository('AppBundle:Member')
+            ->findAll();
+
         return $this->render('card/new.html.twig', array(
             'statuses' => $statuses,
+            'members'  => $members,
             'types'    => $types,
             'card'     => $card,
             'form'     => $form->createView(),
@@ -222,11 +227,16 @@ class CardController extends Controller
             ->getRepository('AppBundle:CardType')
             ->findAll();
 
+        $members = $entityManager
+            ->getRepository('AppBundle:Member')
+            ->findAll();
+
         return $this->render('card/edit.html.twig', array(
-            'statuses' => $statuses,
-            'types' => $types,
-            'card' => $card,
-            'edit_form' => $editForm->createView(),
+            'members'     => $members,
+            'statuses'    => $statuses,
+            'types'       => $types,
+            'card'        => $card,
+            'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }

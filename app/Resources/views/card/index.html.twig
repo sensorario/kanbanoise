@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Cards</h1>
 
-    <table>
+    <ul>
+        <li>
+            <a href="{{ path('card_new') }}">Create a new card</a>
+        </li>
+    </ul>
+
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Id</th>
@@ -37,9 +42,4 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('card_new') }}">Create a new card</a>
-        </li>
-    </ul>
 {% endblock %}
