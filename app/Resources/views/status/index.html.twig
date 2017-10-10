@@ -1,9 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Statuses list</h1>
+    <ul>
+        <li>
+            <a href="{{ path('status_new') }}">Create a new status</a>
+        </li>
+    </ul>
 
-    <table>
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Id</th>
@@ -34,10 +38,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('status_new') }}">Create a new status</a>
-        </li>
-    </ul>
 {% endblock %}
