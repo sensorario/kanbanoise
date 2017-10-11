@@ -72,11 +72,42 @@ class AppContext implements Context
      */
     public function existsStatus($arg1)
     {
+        $this->buildStatus('todo', null);
+    }
+
+    private function buildStatus($name, $wipLimit)
+    {
         $this->status = new \AppBundle\Entity\Status();
-        $this->status->setName('todo');
+        $this->status->setName($name);
         $this->status->setPosition(1);
+        $this->status->setWipLimit($wipLimit);
 
         $this->manager->persist($this->status);
         $this->manager->flush();
+    }
+
+    /**
+     * @When exists status :statusName with wip limit :statusWipLimit
+     */
+    public function existsStatusWithWipLimit($statusName, $statusWipLimit)
+    {
+        $this->buildStatus($statusName, $statusWipLimit);
+    }
+
+    /**
+     * @When /^I check the "([^"]*)" radio button$/
+     */
+    public function iCheckTheRadioButton($labelText)
+    {
+        $page = $this->getSession()->getPage();
+        $radioButton = $page->find('named', ['radio', $labelText]);
+        if ($radioButton) {
+            $select = $radioButton->getAttribute('name');
+            $option = $radioButton->getAttribute('value');
+            $page->selectFieldOption($select, $option);
+            return;
+        }
+
+        throw new \Exception("Radio button with label {$labelText} not found");
     }
 }
