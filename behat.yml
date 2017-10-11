@@ -2,7 +2,9 @@ default:
   suites:
     default:
       path: %paths.base%/features
-      contexts: [Behat\MinkExtension\Context\MinkContext]
+      contexts:
+          - Behat\MinkExtension\Context\MinkContext
+          - AppBundle\Context\AppContext
   extensions:
     Behat\MinkExtension:
       show_cmd: open %s

@@ -26,6 +26,13 @@
                     {% if status.name == 'backlog'%}checked="checked"{% endif %}> {{status.name}}
                 {% endfor %}
             </div>
+            <div>
+                <label for="appbundle_card" class="required">Assigned to</label>
+                {% for member in members %}
+                    <input type="radio" value="{{member.name}}" name="appbundle_card[member]"
+                    {% if member.name == 'backlog'%}checked="checked"{% endif %}> {{member.name}}
+                {% endfor %}
+            </div>
             {{ form_row(form._token) }}
         </div>
         <input type="submit" value="Create">

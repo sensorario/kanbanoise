@@ -33,6 +33,11 @@ class Card
     private $status;
 
     /**
+     * @ORM\Column(name="member", type="string", length=255, nullable=true)
+     */
+    private $member;
+
+    /**
      * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
@@ -88,6 +93,11 @@ class Card
     public function getType()
     {
         return $this->type;
+    }
+
+    public function getMember()
+    {
+        return $this->member;
     }
 }
 

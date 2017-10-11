@@ -34,6 +34,10 @@
                 <th>Status</th>
                 <td>{{ card.status }}</td>
             </tr>
+            <tr>
+                <th>Owner</th>
+                <td>{{ card.member is null ? 'not yet assigned' : card.member }}</td>
+            </tr>
         </tbody>
     </table>
 
