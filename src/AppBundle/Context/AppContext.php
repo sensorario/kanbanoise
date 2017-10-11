@@ -60,10 +60,23 @@ class AppContext implements Context
         $this->card = new \AppBundle\Entity\Card();
         $this->card->setTitle('sample card');
         $this->card->setDescription('this card do nothing');
-        $this->card->setStatus('status');
-        $this->card->setType('type');
+        $this->card->setStatus('todo');
+        $this->card->setType('task');
 
         $this->manager->persist($this->card);
+        $this->manager->flush();
+    }
+
+    /**
+     * @Given exists status :arg1
+     */
+    public function existsStatus($arg1)
+    {
+        $this->status = new \AppBundle\Entity\Status();
+        $this->status->setName('todo');
+        $this->status->setPosition(1);
+
+        $this->manager->persist($this->status);
         $this->manager->flush();
     }
 }
