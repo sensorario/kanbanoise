@@ -95,6 +95,11 @@ class Card
         return $this->type;
     }
 
+    public function setMember($name)
+    {
+        $this->member = $name;
+    }
+
     public function getMember()
     {
         return $this->member;

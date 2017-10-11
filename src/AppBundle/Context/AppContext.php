@@ -9,9 +9,9 @@ class AppContext implements Context
 {
     public function __construct()
     {
-        $kernel = new \AppKernel('test', true);
-        $kernel->boot();
-        $this->container = $kernel->getContainer();
+        $this->kernel = new \AppKernel('test', true);
+        $this->kernel->boot();
+        $this->container = $this->kernel->getContainer();
         $this->manager = $this->container->get('doctrine.orm.entity_manager');
     }
 
@@ -30,12 +30,40 @@ class AppContext implements Context
      */
     public function existsOneCard()
     {
-        $card = new \AppBundle\Entity\Card();
-        $card->setTitle('sample card');
-        $card->setDescription('this card do nothing');
-        $card->setStatus('status');
-        $card->setType('type');
-        $this->manager->persist($card);
+        $this->buildOneCard();
+    }
+
+    /**
+     * @Given exists member :name
+     */
+    public function existsMember($name)
+    {
+        $member = new \AppBundle\Entity\Member();
+        $member->setName($name);
+        $this->manager->persist($member);
+        $this->manager->flush();
+    }
+
+    /**
+     * @Given exists one card assigned to :name
+     */
+    public function existsOneCardAssignedTo($name)
+    {
+        $this->buildOneCard();
+        $this->card->setMember($name);
+        $this->manager->persist($this->card);
+        $this->manager->flush();
+    }
+
+    private function buildOneCard()
+    {
+        $this->card = new \AppBundle\Entity\Card();
+        $this->card->setTitle('sample card');
+        $this->card->setDescription('this card do nothing');
+        $this->card->setStatus('status');
+        $this->card->setType('type');
+
+        $this->manager->persist($this->card);
         $this->manager->flush();
     }
 }
