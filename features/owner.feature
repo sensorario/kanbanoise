@@ -8,7 +8,7 @@ Feature: members management
         When I go to "/card/1"
         Then the response should contain "not yet assigned"
 
-    Scenario: Card without member assigned
+    Scenario: Card with member assigned
         And exists member "sensorario"
         And exists one card assigned to "sensorario"
         When I go to "/card/1"
