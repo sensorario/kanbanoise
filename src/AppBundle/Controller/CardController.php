@@ -141,7 +141,8 @@ class CardController extends Controller
             $numberOfCardInCurrentStatus = count($cardInStatus);
             $limitOfCard = $status->getWipLimit();
             $postStatus = $request->request->get('appbundle_card')['status'];
-            if ($limitOfCard <= $numberOfCardInCurrentStatus) {
+            if ($limitOfCard > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
+                $this->get('logger')->critical('threshold reached');
                 return $this->redirectToRoute('kanban');
             }
 
