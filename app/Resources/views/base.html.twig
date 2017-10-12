@@ -10,16 +10,19 @@
 		<div class="container">
 			<ul class="nav nav-tabs">
 			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "card_index" %}active{% endif %}" href="{{ url('card_index') }}">Tasks</a>
+				<a class="nav-link {% if app.request.attributes.get('_route') == "card_index" %}active{% endif %}" href="{{ url('card_index') }}">tasks</a>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "status_index" %}active{% endif %}" href="{{ url('status_index') }}">Status</a>
+				<a class="nav-link {% if app.request.attributes.get('_route') == "status_index" %}active{% endif %}" href="{{ url('status_index') }}">status</a>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "member_index" %}active{% endif %}" href="{{ url('member_index') }}">Members</a>
+				<a class="nav-link {% if app.request.attributes.get('_route') == "member_index" %}active{% endif %}" href="{{ url('member_index') }}">members</a>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "kanban" %}active{% endif %}" href="{{ url('kanban') }}">Kanban</a>
+				<a class="nav-link {% if app.request.attributes.get('_route') == "kanban" %}active{% endif %}" href="{{ url('kanban') }}">kanban</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link {% if app.request.attributes.get('_route') == "downloads" %}active{% endif %}" href="{{ url('downloads') }}">dowloads</a>
 			  </li>
 			</ul>
 			<div>&nbsp;</div>
