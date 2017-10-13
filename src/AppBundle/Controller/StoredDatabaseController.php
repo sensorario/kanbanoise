@@ -89,28 +89,19 @@ class StoredDatabaseController extends Controller
     }
 
     /**
-     * @Route("/{id}/edit", name="storeddatabase_edit")
+     * @Route("/{file}/edit", name="storeddatabase_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, StoredDatabase $storedDatabase)
+    public function editAction(Request $request, string $file)
     {
-        $deleteForm = $this->createDeleteForm($storedDatabase);
-        $editForm = $this->createForm('AppBundle\Form\StoredDatabaseType', $storedDatabase);
-        $editForm->handleRequest($request);
+        @unlink(__DIR__ . '/../../../uploads/' . $file);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        @copy(
+            __DIR__ . '/../../../var/data/data.sqlite',
+            __DIR__ . '/../../../uploads/' . $file
+        );
 
-        $this->get('logger')->critical('foo');
-
-            return $this->redirectToRoute('storeddatabase_edit', array('id' => $storedDatabase->getId()));
-        }
-
-        return $this->render('storeddatabase/edit.html.twig', array(
-            'storedDatabase' => $storedDatabase,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->redirectToRoute('kanban');
     }
 
     /**

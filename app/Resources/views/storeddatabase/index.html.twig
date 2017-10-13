@@ -12,12 +12,14 @@
         <thead>
             <tr>
                 <th>Relativepath</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for storedDatabase in storedDatabases %}
             <tr>
                 <td><a href="{{ url('storeddatabase_load', { 'file' : storedDatabase }) }}">{{ storedDatabase }}</a></td>
+                <td><a href="{{ url('storeddatabase_edit', { 'file' : storedDatabase }) }}">update</a></td>
             </tr>
         {% endfor %}
         </tbody>
