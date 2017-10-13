@@ -19,6 +19,9 @@
 				<a class="nav-link {% if app.request.attributes.get('_route') == "member_index" %}active{% endif %}" href="{{ url('member_index') }}">members</a>
 			  </li>
 			  <li class="nav-item">
+				<a class="nav-link {% if app.request.attributes.get('_route') == "storeddatabase_index" %}active{% endif %}" href="{{ url('storeddatabase_index') }}">stored database</a>
+			  </li>
+			  <li class="nav-item">
 				<a class="nav-link {% if app.request.attributes.get('_route') == "kanban" %}active{% endif %}" href="{{ url('kanban') }}">kanban</a>
 			  </li>
 			  <li class="nav-item">

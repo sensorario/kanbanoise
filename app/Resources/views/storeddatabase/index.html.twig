@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ul>
+        <li>
+            <a href="{{ path('storeddatabase_new') }}">Create a new storedDatabase</a>
+        </li>
+    </ul>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Relativepath</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for storedDatabase in storedDatabases %}
+            <tr>
+                <td><a href="{{ url('storeddatabase_load', { 'file' : storedDatabase }) }}">{{ storedDatabase }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
