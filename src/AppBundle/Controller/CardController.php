@@ -202,7 +202,6 @@ class CardController extends Controller
         $editForm = $this->createForm('AppBundle\Form\CardType', $card);
         $editForm->handleRequest($request);
 
-
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
 
@@ -211,10 +210,10 @@ class CardController extends Controller
             $numberOfCardInCurrentStatus = count($cardInStatus);
             $limitOfCard = $status->getWipLimit();
             $postStatus = $request->request->get('appbundle_card')['status'];
-            if ($limitOfCard <= $numberOfCardInCurrentStatus) {
+
+            if ($numberOfCardInCurrentStatus > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
                 return $this->redirectToRoute('kanban');
             }
-
 
             $this->getDoctrine()->getManager()->flush();
 
