@@ -204,18 +204,17 @@ class CardController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
-
             $cardInStatus = $entityManager->getRepository('AppBundle:Card')->findby(['status' => $card->getStatus()]);
             $status = $entityManager->getRepository('AppBundle:Status')->findOneBy(['name' => $card->getStatus()]);
             $numberOfCardInCurrentStatus = count($cardInStatus);
             $limitOfCard = $status->getWipLimit();
             $postStatus = $request->request->get('appbundle_card')['status'];
 
+            $this->getDoctrine()->getManager()->flush();
+
             if ($numberOfCardInCurrentStatus > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
                 return $this->redirectToRoute('kanban');
             }
-
-            $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('kanban');
         }
