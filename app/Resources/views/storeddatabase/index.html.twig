@@ -19,7 +19,12 @@
         {% for storedDatabase in storedDatabases %}
             <tr>
                 <td><a href="{{ url('storeddatabase_load', { 'file' : storedDatabase }) }}">{{ storedDatabase }}</a></td>
-                <td><a href="{{ url('storeddatabase_edit', { 'file' : storedDatabase }) }}">update</a></td>
+                <td>
+                    <ul>
+                        <li><a href="{{ url('storeddatabase_edit', { 'file' : storedDatabase }) }}">update</a></li>
+                        <li><a href="{{ url('storeddatabase_delete', { 'file' : storedDatabase }) }}">delete</a></li>
+                    </ul>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
