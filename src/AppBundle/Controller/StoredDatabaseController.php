@@ -75,20 +75,6 @@ class StoredDatabaseController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="storeddatabase_show")
-     * @Method("GET")
-     */
-    public function showAction(StoredDatabase $storedDatabase)
-    {
-        $deleteForm = $this->createDeleteForm($storedDatabase);
-
-        return $this->render('storeddatabase/show.html.twig', array(
-            'storedDatabase' => $storedDatabase,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
      * @Route("/{file}/edit", name="storeddatabase_edit")
      * @Method({"GET", "POST"})
      */
@@ -105,19 +91,12 @@ class StoredDatabaseController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="storeddatabase_delete")
-     * @Method("DELETE")
+     * @Route("/{file}", name="storeddatabase_delete")
+     * @Method("GET")
      */
-    public function deleteAction(Request $request, StoredDatabase $storedDatabase)
+    public function deleteAction(Request $request, string $file)
     {
-        $form = $this->createDeleteForm($storedDatabase);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($storedDatabase);
-            $em->flush();
-        }
+        @unlink(__DIR__ . '/../../../uploads/' . $file);
 
         return $this->redirectToRoute('storeddatabase_index');
     }
