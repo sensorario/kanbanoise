@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\UseCase\CardRegression;
 
 /**
  * @Route("card")
@@ -18,28 +19,13 @@ class CardController extends Controller
      * @Route("/kanban/card/{card}/regress", name="card_regress")
      * @Method("GET")
      */
-    public function regressAction(Card $card, EntityManager $manager)
-    {
-        $statuses = $manager
-            ->getRepository('AppBundle:Status')
-            ->findAll();
-
-        $previousWasPrevious = false;
-        $previousState = '';
-        foreach ($statuses as $status) {
-            if ($previousWasPrevious == true) {
-                $card->setStatus($previousState);
-                $manager->persist($card);
-                $manager->flush();
-                return $this->redirectToRoute('kanban');
-            }
-
-            if ($status->getName() == $card->getStatus()) {
-                $previousWasPrevious = true;
-            } else {
-                $previousState = $status->getName();
-            }
-        }
+    public function regressAction(
+        Card $card,
+        EntityManager $manager,
+        CardRegression $cardRegression
+    ) {
+        $cardRegression->setCard($card);
+        $cardRegression->execute();
 
         return $this->redirectToRoute('kanban');
     }
@@ -50,6 +36,7 @@ class CardController extends Controller
      */
     public function progressAction(Card $card, EntityManager $manager)
     {
+        /** @todo implement use case 'CardProgression' */
         $statuses = $manager
             ->getRepository('AppBundle:Status')
             ->findAll();

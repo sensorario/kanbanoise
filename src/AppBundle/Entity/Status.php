@@ -32,6 +32,14 @@ class Status
      */
     private $wipLimit;
 
+    public static function fromArray(array $params)
+    {
+        $obj = new self();
+        $obj->setName($params['name']);
+        $obj->setPosition($params['position']);
+        return $obj;
+    }
+
     public function getId()
     {
         return $this->id;
