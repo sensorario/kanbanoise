@@ -45,7 +45,7 @@ class CardControllerTest extends TestCase
 
         $this->finder->expects($this->once())
             ->method('findByName')
-            ->with(\AppBundle\Entity\Status::class, 'bar')
+            ->with('bar')
             ->willReturn(\AppBundle\Entity\Status::fromArray([
                 'name' => 'bar',
                 'position' => '2',
@@ -53,7 +53,7 @@ class CardControllerTest extends TestCase
 
         $this->finder->expects($this->once())
             ->method('findByPosition')
-            ->with(\AppBundle\Entity\Status::class, 1)
+            ->with(1)
             ->willReturn($newStatus = \AppBundle\Entity\Status::fromArray([
                 'name' => 'foooo',
                 'position' => '1',
@@ -63,7 +63,6 @@ class CardControllerTest extends TestCase
             ->method('save');
 
         $cardRegression = new CardRegression(
-            $this->manager,
             $this->finder,
             $this->persistor
         );
@@ -96,14 +95,13 @@ class CardControllerTest extends TestCase
 
         $this->finder->expects($this->once())
             ->method('findByName')
-            ->with(\AppBundle\Entity\Status::class, 'foooo')
+            ->with('foooo')
             ->willReturn(\AppBundle\Entity\Status::fromArray([
                 'name' => 'foooo',
                 'position' => '1',
             ]));
 
         $cardRegression = new CardRegression(
-            $this->manager,
             $this->finder,
             $this->persistor
         );

@@ -7,8 +7,6 @@ use AppBundle\Entity\Status;
 
 class CardRegression
 {
-    private $manager;
-
     private $card;
 
     private $finder;
@@ -16,13 +14,16 @@ class CardRegression
     private $persistor;
 
     public function __construct(
-        \Doctrine\ORM\EntityManager $manager,
         \AppBundle\Actors\Finder $finder,
         \AppBundle\Actors\Persistor $persistor
     ) {
-        $this->manager = $manager;
         $this->finder = $finder;
         $this->persistor = $persistor;
+    }
+
+    private function init()
+    {
+        $this->finder->setEntity(Status::class);
     }
 
     public function setCard(Card $card)
@@ -32,14 +33,14 @@ class CardRegression
 
     public function execute()
     {
-        $status = $this->finder->findByName(Status::class, $this->card->getStatus());
+        $status = $this->finder->findByName($this->card->getStatus());
 
         if ($status->getPosition() == 1) {
             return true;
         }
 
         $position = $status->getPosition() - 1;
-        $newStatus = $this->finder->findByPosition(Status::class, $position);
+        $newStatus = $this->finder->findByPosition($position);
         $this->card->setStatus($newStatus->getName());
         $this->persistor->save($this->card);
 
