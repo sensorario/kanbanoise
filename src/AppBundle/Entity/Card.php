@@ -49,7 +49,7 @@ class Card
 
     public function __construct()
     {
-        $this->expiration = new \DateTime();
+        $this->expiration = new \DateTime('+1 week');
     }
 
     public function getId()
