@@ -24,7 +24,7 @@
         {% for status in statuses %}
             <td class="p-2">
                 {% for card in bugs[status.name] %}
-                    {% include 'card/_card.html.twig' with {'card' : card} %}
+                    {% include 'card/_card.html.twig' with {'card' : card, 'color' : 'indianred'} %}
                 {% endfor %}
             </td>
         {% endfor %}
@@ -33,7 +33,7 @@
         {% for status in statuses %}
             <td class="p-2">
                 {% for card in cards[status.name] %}
-                    {% include 'card/_card.html.twig' with {'card' : card} %}
+                    {% include 'card/_card.html.twig' with {'card' : card, 'color' : 'lightblue'} %}
                 {% endfor %}
             </td>
         {% endfor %}
