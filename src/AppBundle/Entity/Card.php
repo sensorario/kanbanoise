@@ -49,7 +49,7 @@ class Card
 
     public function __construct()
     {
-        $this->expiration = (new DateTime())->format('Y-m-d');
+        $this->expiration = new \DateTime();
     }
 
     public function getId()
