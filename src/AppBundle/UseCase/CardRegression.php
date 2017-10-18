@@ -21,6 +21,8 @@ class CardRegression
     ) {
         $this->finder = $finder;
         $this->persistor = $persistor;
+
+        $this->init();
     }
 
     private function init()
