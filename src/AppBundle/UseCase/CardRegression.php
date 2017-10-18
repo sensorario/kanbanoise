@@ -2,6 +2,8 @@
 
 namespace AppBundle\UseCase;
 
+use AppBundle\Actors\Finder;
+use AppBundle\Actors\Persistor;
 use AppBundle\Entity\Card;
 use AppBundle\Entity\Status;
 
@@ -14,8 +16,8 @@ class CardRegression
     private $persistor;
 
     public function __construct(
-        \AppBundle\Actors\Finder $finder,
-        \AppBundle\Actors\Persistor $persistor
+        Finder $finder,
+        Persistor $persistor
     ) {
         $this->finder = $finder;
         $this->persistor = $persistor;
@@ -39,8 +41,10 @@ class CardRegression
             return true;
         }
 
+        /** @todo ensure all position are numerical and sequentials */
         $position = $status->getPosition() - 1;
         $newStatus = $this->finder->findByPosition($position);
+
         $this->card->setStatus($newStatus->getName());
         $this->persistor->save($this->card);
 
