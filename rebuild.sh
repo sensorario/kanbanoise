@@ -17,4 +17,4 @@ php ./bin/console doctrine:query:sql --env=test "insert into status values (null
 
 php ./bin/console doctrine:query:sql --env=test "insert into card values (null, 'release version 1.0.0', 'add lot of features and tag version 1.0.0', 'in progress', 'sensorario', 'task');"
 php ./bin/console doctrine:query:sql --env=test "insert into card values (null, 'save magic', 'save the magic from Empirikul', 'todo', 'doctor strange', 'task');"
-php ./bin/console doctrine:query:sql --env=test "insert into card values (null, 'useless hero', 'exists this useless hero', 'done', 'doctor strange', 'bug');"
+php ./bin/console doctrine:query:sql --env=test "insert into card values (null, 'missing arm', 'there is no arm after the battle with doctor strnage', 'in progress', 'deadpool', 'bug');"
