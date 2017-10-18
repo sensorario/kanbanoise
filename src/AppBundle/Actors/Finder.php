@@ -18,7 +18,7 @@ class Finder
         $this->entityClass = $entityClass;
     }
 
-    public function entureEntityClasssIsDefined()
+    public function ensureEntityClasssIsDefined()
     {
         if (!$this->entityClass) {
             throw new \RuntimeException(
@@ -29,7 +29,7 @@ class Finder
 
     public function findByPosition(string $position)
     {
-        $this->entureEntityClasssIsDefined();
+        $this->ensureEntityClasssIsDefined();
 
         return $this->manager
             ->getRepository($this->entityClass)
@@ -40,7 +40,7 @@ class Finder
 
     public function findByName(string $name)
     {
-        $this->entureEntityClasssIsDefined();
+        $this->ensureEntityClasssIsDefined();
 
         return $this->manager
             ->getRepository($this->entityClass)
