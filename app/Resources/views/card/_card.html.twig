@@ -4,6 +4,7 @@
     {% if card.member is not null %}<div class="card-text p-1">@{{card.member}}</div>{% endif %}
     <div class="card-footer p-1">
         <a class="float-left" href="{{url('card_regress', {'card':card.id})}}">&lt;</a>
+        {% if card.expiration is not null %}<span class="text-muted p-1">{{card.expiration|date('d/m')}}</span>{% endif %}
         <a class="float-right" href="{{url('card_progress', {'card':card.id})}}">&gt;</a>
     </div>
 </div>

@@ -42,6 +42,16 @@ class Card
      */
     private $type;
 
+    /**
+     * @ORM\Column(name="expiration", type="date", length=14, nullable=true)
+     */
+    private $expiration;
+
+    public function __construct()
+    {
+        $this->expiration = (new DateTime())->format('Y-m-d');
+    }
+
     public function getId()
     {
         return $this->id;
@@ -103,6 +113,16 @@ class Card
     public function getMember()
     {
         return $this->member;
+    }
+
+    public function setExpiration($expiration)
+    {
+        $this->expiration = $expiration;
+    }
+
+    public function getExpiration()
+    {
+        return $this->expiration;
     }
 }
 
