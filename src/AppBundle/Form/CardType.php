@@ -16,6 +16,7 @@ class CardType extends AbstractType
             ->add('status')
             ->add('member')
             ->add('type')
+            ->add('datetime')
         ;
     }
 

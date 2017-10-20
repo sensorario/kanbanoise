@@ -43,6 +43,11 @@ class Card
     private $type;
 
     /**
+     * @ORM\Column(name="datetime", type="datetime", length=255)
+     */
+    private $datetime;
+
+    /**
      * @ORM\Column(name="expiration", type="date", length=14, nullable=true)
      */
     private $expiration;
@@ -123,6 +128,16 @@ class Card
     public function getExpiration()
     {
         return $this->expiration;
+    }
+
+    public function setDatetime($datetime)
+    {
+        $this->datetime = $datetime;
+    }
+
+    public function getDatetime()
+    {
+        return $this->datetime;
     }
 }
 
