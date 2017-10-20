@@ -3,6 +3,10 @@ php ./bin/console doctrine:database:drop --force --env=test
 php ./bin/console doctrine:database:create --env=test
 php ./bin/console doctrine:schema:update --force --env=test
 
+php ./bin/console doctrine:query:sql --env=test "insert into member values (null, 'sensorario');"
+
+php ./bin/console doctrine:query:sql --env=test "insert into board values (null, 'sensorario', 4);"
+
 php ./bin/console doctrine:query:sql --env=test "insert into status values (null, 'backlog', 1, null);"
 php ./bin/console doctrine:query:sql --env=test "insert into status values (null, 'todo', 2, null);"
 php ./bin/console doctrine:query:sql --env=test "insert into status values (null, 'in progress', 3, 1);"
