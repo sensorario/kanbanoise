@@ -12,4 +12,4 @@ Feature: wip limit
         And I fill in "Description" with "sample"
         And I select "todo" from "appbundle_card[status]"
         And I press "Create"
-        And the response should contain "wip limit reached"
+        Then the response should contain "wip limit reached"
