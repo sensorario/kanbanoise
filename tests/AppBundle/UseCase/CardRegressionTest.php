@@ -143,6 +143,7 @@ class CardControllerTest extends TestCase
         $this->card->setTitle($status);
         $this->card->setDescription($status);
         $this->card->setType('task');
+        $this->card->setDatetime(new \DateTime('now'));
         $this->manager->persist($this->card);
         $this->manager->flush();
     }
