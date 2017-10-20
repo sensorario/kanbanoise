@@ -23,6 +23,7 @@ class AppContext implements Context
         $this->manager->createQuery('delete from AppBundle\Entity\Member')->execute();
         $this->manager->createQuery('delete from AppBundle\Entity\Card')->execute();
         $this->manager->createQuery('delete from AppBundle\Entity\Status')->execute();
+        $this->manager->createQuery('delete from AppBundle\Entity\Board')->execute();
     }
 
     /**
@@ -45,26 +46,31 @@ class AppContext implements Context
     }
 
     /**
-     * @Given exists one card assigned to :name
+     * @Given exists :amount card assigned to :name
      */
-    public function existsOneCardAssignedTo($name)
+    public function existSomeCardsAssignedTo($amount, $name)
     {
-        $this->buildOneCard();
-        $this->card->setMember($name);
-        $this->manager->persist($this->card);
-        $this->manager->flush();
+        for ($i = 0; $i <= $amount; $i++) {
+            $card = $this->buildOneCard();
+            $card->setMember($name);
+            $this->manager->persist($card);
+            $this->manager->flush();
+        }
     }
 
-    private function buildOneCard()
+    private function buildOneCard() : \AppBundle\Entity\Card
     {
-        $this->card = new \AppBundle\Entity\Card();
-        $this->card->setTitle('sample card');
-        $this->card->setDescription('this card do nothing');
-        $this->card->setStatus('todo');
-        $this->card->setType('task');
+        $card = new \AppBundle\Entity\Card();
+        $card->setTitle('sample card');
+        $card->setDescription('this card do nothing');
+        $card->setStatus('todo');
+        $card->setType('task');
+        $card->setDatetime(new \DateTime('now'));
 
-        $this->manager->persist($this->card);
+        $this->manager->persist($card);
         $this->manager->flush();
+
+        return $card;
     }
 
     /**
@@ -109,5 +115,17 @@ class AppContext implements Context
         }
 
         throw new \Exception("Radio button with label {$labelText} not found");
+    }
+
+    /**
+     * @Given exists a board with wip limit of :wip
+     */
+    public function existsABoard($wip)
+    {
+        $this->board = new \AppBundle\Entity\Board();
+        $this->board->setOwner('sensorario');
+        $this->board->setWipLimit($wip);
+        $this->manager->persist($this->board);
+        $this->manager->flush();
     }
 }

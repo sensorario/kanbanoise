@@ -123,6 +123,14 @@ class CardController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $cardInBoard = count($entityManager->getRepository('AppBundle:Card')->findAll());
+            $boardConf = $entityManager->getRepository('AppBundle:Board')->findAll()[0];
+            if ($cardInBoard >= $boardConf->getWipLimit()) {
+                $this->get('logger')->critical('threshold reached');
+                $this->addFlash('notice', 'wip board limit reached');
+                return $this->redirectToRoute('kanban');
+            }
+
             $cardInStatus = $entityManager->getRepository('AppBundle:Card')->findby(['status' => $card->getStatus()]);
             $status = $entityManager->getRepository('AppBundle:Status')->findOneBy(['name' => $card->getStatus()]);
             $numberOfCardInCurrentStatus = count($cardInStatus);
@@ -130,7 +138,7 @@ class CardController extends Controller
             $postStatus = $request->request->get('appbundle_card')['status'];
             if ($limitOfCard > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
                 $this->get('logger')->critical('threshold reached');
-                $this->addFlash('notice', 'wip limit reached');
+                $this->addFlash('notice', 'wip column limit reached');
                 return $this->redirectToRoute('kanban');
             }
 
