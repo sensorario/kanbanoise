@@ -2,8 +2,9 @@
 
 namespace AppBundle\Context;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
+use Kanban\Factories\CardFactory;
 
 class AppContext implements Context
 {
@@ -60,12 +61,7 @@ class AppContext implements Context
 
     private function buildOneCard() : \AppBundle\Entity\Card
     {
-        $card = new \AppBundle\Entity\Card();
-        $card->setTitle('sample card');
-        $card->setDescription('this card do nothing');
-        $card->setStatus('todo');
-        $card->setType('task');
-        $card->setDatetime(new \DateTime('now'));
+        $card = CardFactory::buildWithStatus('todo');
 
         $this->manager->persist($card);
         $this->manager->flush();

@@ -5,6 +5,7 @@ namespace Tests\AppBundle\UseCase;
 use AppBundle\Entity\Card;
 use AppBundle\Entity\Status;
 use AppBundle\UseCase\CardRegression;
+use Kanban\Factories\CardFactory;
 use PHPUnit\Framework\TestCase;
 
 class CardControllerTest extends TestCase
@@ -138,12 +139,8 @@ class CardControllerTest extends TestCase
 
     public function andACardExistsInStatus(string $status)
     {
-        $this->card = new Card();
-        $this->card->setStatus($status);
-        $this->card->setTitle($status);
-        $this->card->setDescription($status);
-        $this->card->setType('task');
-        $this->card->setDatetime(new \DateTime('now'));
+        $this->card = CardFactory::buildWithStatus($status);
+
         $this->manager->persist($this->card);
         $this->manager->flush();
     }
