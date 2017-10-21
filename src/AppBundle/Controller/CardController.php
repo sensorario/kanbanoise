@@ -124,7 +124,15 @@ class CardController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $cardInBoard = count($entityManager->getRepository('AppBundle:Card')->findAll());
-            $boardConf = $entityManager->getRepository('AppBundle:Board')->findAll()[0];
+            $boards = $entityManager->getRepository('AppBundle:Board')->findAll();
+
+            if (count($boards) == 0) {
+                throw new \RuntimeException(
+                    'Oops! No boards found'
+                );
+            }
+
+            $boardConf = $boards[0];
             if ($cardInBoard >= $boardConf->getWipLimit()) {
                 $this->get('logger')->critical('threshold reached');
                 $this->addFlash('notice', 'wip board limit reached');

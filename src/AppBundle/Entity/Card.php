@@ -43,7 +43,7 @@ class Card
     private $type;
 
     /**
-     * @ORM\Column(name="datetime", type="datetime", length=255)
+     * @ORM\Column(name="datetime", type="datetime", length=255, nullable=true)
      */
     private $datetime;
 
