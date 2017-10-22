@@ -29,24 +29,16 @@ class Finder
 
     public function findByPosition(string $position)
     {
-        $this->ensureEntityClasssIsDefined();
-
-        return $this->manager
-            ->getRepository($this->entityClass)
-            ->findOneBy([
-                'position' => $position,
-            ]);
+        return $this->findBy([
+            'position' => $position,
+        ]);
     }
 
     public function findByName(string $name)
     {
-        $this->ensureEntityClasssIsDefined();
-
-        return $this->manager
-            ->getRepository($this->entityClass)
-            ->findOneBy([
-                'name' => $name,
-            ]);
+        return $this->findBy([
+            'name' => $name,
+        ]);
     }
 
     public function findBy(array $criteria)
