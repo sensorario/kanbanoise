@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="wrapper">
+        <div id="container">
+            <div id="welcome">
+                <table class="table table-bordered">
+                <tr>
+                    <th>id</th>
+                    <th>title</th>
+                    <th>type</th>
+                    <th>status</th>
+                    <th>member</th>
+                </tr>
+                {% for card in userCards %}
+                    <tr>
+                        <td>{{ card.id }}</td>
+                        <td>{{ card.title }}</td>
+                        <td>{{ card.type }}</td>
+                        <td>{{ card.status }}</td>
+                        <td>{{ card.member }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

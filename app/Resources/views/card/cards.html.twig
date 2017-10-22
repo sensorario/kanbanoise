@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Member</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for card in cards %}
+            <tr>
+                <td><a href="{{ path('card_show', { 'id': card.id }) }}">{{ card.id }}</a></td>
+                <td>{{ card.title }}</td>
+                <td>{{ card.description }}</td>
+                <td>{{ card.status }}</td>
+                <td>{{ card.type }}</td>
+				<td><a href="{{ url('users_stats', {'username':card.member}) }}">{{card.member}}</a>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

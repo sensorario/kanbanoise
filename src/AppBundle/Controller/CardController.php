@@ -111,6 +111,21 @@ class CardController extends Controller
     }
 
     /**
+     * @Route("/cards", name="cards")
+     * @Method("GET")
+     */
+    public function listAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $cards = $em->getRepository('AppBundle:Card')->findAll();
+
+        return $this->render('card/cards.html.twig', array(
+            'cards' => $cards,
+        ));
+    }
+
+    /**
      * @Route("/new", name="card_new")
      * @Method({"GET", "POST"})
      */

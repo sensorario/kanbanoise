@@ -1,7 +1,7 @@
 <div class="card m-1 draggable">
     <div class="card-header p-1" style="background-color: {{color}};"><a href="{{ url('card_edit', {'id':card.id}) }}">#{{card.id}} - {{card.title}}</a></div>
     <div class="card-text p-1">{{card.description}}</div>
-    {% if card.member is not null %}<div class="card-text p-1">@{{card.member}}</div>{% endif %}
+    {% if card.member is not null %}<div class="card-text p-1"><a href="{{ url('users_stats', {'username':card.member}) }}">@{{card.member}}</a></div>{% endif %}
     <div class="card-footer p-1">
         <a class="float-left" href="{{url('card_regress', {'card':card.id})}}">&lt;</a>
         {% if card.datetime is not null %}<span class="text-muted p-1">{{card.datetime|date('d/m/Y')}}</span>{% endif %}

@@ -31,14 +31,21 @@
 			  <li class="nav-item">
 				<a class="nav-link {% if app.request.attributes.get('_route') == "stats" %}active{% endif %}" href="{{ url('stats') }}">stats</a>
 			  </li>
+			  <li class="nav-item">
+				<a class="nav-link {% if app.request.attributes.get('_route') == "users_stats" %}active{% endif %}" href="{{ url('users_stats', { 'username' : 'sensorario'}) }}">users stats</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link {% if app.request.attributes.get('_route') == "cards" %}active{% endif %}" href="{{ url('cards') }}">cards</a>
+			  </li>
 			</ul>
 			<div>&nbsp;</div>
-			{% block body %}{% endblock %}
             <div class="text-center">
+                <a href="{{ path('card_new') }}">new card</a> ] [
                 <a href="https://github.com/sensorario/kanbanoise/projects/1">project</a> |
-                <a href="https://github.com/sensorario/kanbanoise/issues">issues</a> |
-                <a href="{{ path('card_new') }}">new card</a>
+                <a href="https://github.com/sensorario/kanbanoise/issues">issues</a> 
             </div>
+			<div>&nbsp;</div>
+			{% block body %}{% endblock %}
             <div class="text-center">
                 <a class="github-button" href="https://github.com/sensorario/kanbanoise" data-size="large" data-show-count="true" aria-label="Star sensorario/kanbanoise on GitHub">Star</a>
             </div>
