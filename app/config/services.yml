@@ -15,6 +15,6 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
-    AppBundle\Actors\:
-        resource: '../../src/AppBundle/Actors'
+    Kanban\Actors\:
+        resource: '../../src/Kanban/Actors'
         public: true

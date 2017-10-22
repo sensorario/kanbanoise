@@ -2,7 +2,7 @@
 
 namespace Tests\AppBundle\Actors;
 
-use AppBundle\Actors\Finder;
+use Kanban\Actors\Finder;
 use PHPUnit\Framework\TestCase;
 
 class FinderTest extends TestCase

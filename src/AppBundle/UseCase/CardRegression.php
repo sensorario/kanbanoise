@@ -2,10 +2,10 @@
 
 namespace AppBundle\UseCase;
 
-use AppBundle\Actors\Finder;
-use AppBundle\Actors\Persistor;
 use AppBundle\Entity\Card;
 use AppBundle\Entity\Status;
+use Kanban\Actors\Finder;
+use Kanban\Actors\Persistor;
 
 class CardRegression
 {

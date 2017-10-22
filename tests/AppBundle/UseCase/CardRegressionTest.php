@@ -8,7 +8,7 @@ use AppBundle\UseCase\CardRegression;
 use Kanban\Factories\CardFactory;
 use PHPUnit\Framework\TestCase;
 
-class CardControllerTest extends TestCase
+class CardRegressionTest extends TestCase
 {
     public function setUp()
     {
@@ -18,12 +18,12 @@ class CardControllerTest extends TestCase
         $this->manager = $this->container->get('doctrine.orm.entity_manager');
 
         $this->finder = $this
-            ->getMockBuilder('AppBundle\Actors\Finder')
+            ->getMockBuilder('Kanban\Actors\Finder')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->persistor = $this
-            ->getMockBuilder('AppBundle\Actors\Persistor')
+            ->getMockBuilder('Kanban\Actors\Persistor')
             ->disableOriginalConstructor()
             ->getMock();
     }
