@@ -4,52 +4,22 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="card")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CardRepository")
- */
 class Card
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     private $id;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255)
-     */
     private $title;
 
-    /**
-     * @ORM\Column(name="description", type="text")
-     */
     private $description;
 
-    /**
-     * @ORM\Column(name="status", type="string", length=255)
-     */
     private $status;
 
-    /**
-     * @ORM\Column(name="member", type="string", length=255, nullable=true)
-     */
     private $member;
 
-    /**
-     * @ORM\Column(name="type", type="string", length=255)
-     */
     private $type;
 
-    /**
-     * @ORM\Column(name="datetime", type="datetime", length=255, nullable=true)
-     */
     private $datetime;
 
-    /**
-     * @ORM\Column(name="expiration", type="date", length=14, nullable=true)
-     */
     private $expiration;
 
     public function __construct()
