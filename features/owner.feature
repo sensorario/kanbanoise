@@ -6,7 +6,7 @@ Feature: members management
     Scenario: Card without member assigned
         And exists one card
         When I go to "/card/1"
-        Then the response should contain "not yet assigned"
+        Then the response should contain "never assigned"
 
     Scenario: Card with member assigned
         And exists member "sensorario"

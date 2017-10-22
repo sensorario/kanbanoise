@@ -36,7 +36,7 @@
             </tr>
             <tr>
                 <th>Owner</th>
-                <td>{{ card.member is null ? 'not yet assigned' : card.member }}</td>
+                <td>{% include 'card/_member.html.twig' with {'card':card} %}</td>
             </tr>
         </tbody>
     </table>

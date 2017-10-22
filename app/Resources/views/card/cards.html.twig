@@ -21,7 +21,7 @@
                 <td>{{ card.description }}</td>
                 <td>{{ card.status }}</td>
                 <td>{{ card.type }}</td>
-				<td><a href="{{ url('users_stats', {'username':card.member}) }}">{{card.member}}</a>
+                <td>{% include 'card/_member.html.twig' with {'card':card} %}</td>
             </tr>
         {% endfor %}
         </tbody>

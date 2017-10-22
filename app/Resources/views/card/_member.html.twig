@@ -1,0 +1,5 @@
+{% if card.member is not null %}
+    <a href="{{ url('users_stats', {'username':card.member}) }}">@{{card.member}}</a>
+{% else %}
+    <em>never assigned</em>
+{% endif %}

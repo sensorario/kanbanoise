@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Card;
 use AppBundle\UseCase\CardRegression;
 use Doctrine\ORM\EntityManager;
-use Kanban\Actors\Finder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -64,27 +63,28 @@ class CardController extends Controller
      * @Method("GET")
      */
     public function todoAction(
-        EntityManager $manager,
-        Finder $cardFinder
+        EntityManager $manager
     ) {
         $statuses = $manager
             ->getRepository('AppBundle:Status')
             ->findAll();
 
-        $cardFinder->setEntity(\AppBundle\Entity\Card::class);
-
         $tasks = [];
         $bugs = [];
         foreach ($statuses as $status) {
-            $tasks[$status->getName()] = $cardFinder->findBy([
-                'status' => $status->getName(),
-                'type'   => 'task',
-            ]);
+            $tasks[$status->getName()] = $manager
+                ->getRepository('AppBundle:Card')
+                ->findBy([
+                    'status' => $status->getName(),
+                    'type'   => 'task',
+                ]);
 
-            $bugs[$status->getName()] = $cardFinder->findBy([
-                'status' => $status->getName(),
-                'type'   => 'bug',
-            ]);
+            $bugs[$status->getName()] = $manager
+                ->getRepository('AppBundle:Card')
+                ->findBy([
+                    'status' => $status->getName(),
+                    'type'   => 'bug',
+                ]);
         }
 
         return $this->render('card/kanban.html.twig', array(
