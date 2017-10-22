@@ -1,7 +1,5 @@
 <?php
 
-namespace Tests\AppBundle\Actors;
-
 use Kanban\Actors\Finder;
 use PHPUnit\Framework\TestCase;
 
