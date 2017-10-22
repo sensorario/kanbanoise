@@ -48,4 +48,13 @@ class Finder
                 'name' => $name,
             ]);
     }
+
+    public function findBy(array $criteria)
+    {
+        $this->ensureEntityClasssIsDefined();
+
+        return $this->manager
+            ->getRepository($this->entityClass)
+            ->findOneBy($criteria);
+    }
 }

@@ -1,3 +1,3 @@
 #!/bin/bash
-./bin/behat
+./bin/behat --format=progress
 ./runtests.sh
