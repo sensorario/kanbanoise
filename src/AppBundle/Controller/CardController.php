@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Card;
 use AppBundle\UseCase\CardRegression;
 use Doctrine\ORM\EntityManager;
+use Kanban\Actors\BoardLimitChecker;
 use Kanban\Actors\LimitChecker;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -39,7 +40,7 @@ class CardController extends Controller
     public function progressAction(
         Card $card,
         EntityManager $manager,
-        LimitChecker $limitChecker
+        LimitChecker $columnLimitChecker
     ) {
         $statuses = $manager
             ->getRepository('AppBundle:Status')
@@ -50,8 +51,8 @@ class CardController extends Controller
             if ($nextIsNext == true) {
                 $card->setStatus($status->getName());
 
-                $limitChecker->setCard($card);
-                if ($limitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
+                $columnLimitChecker->setCard($card);
+                if ($columnLimitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
                     $this->addFlash('notice', 'wip column limit reached');
                     return $this->redirectToRoute('kanban');
                 }
@@ -144,31 +145,22 @@ class CardController extends Controller
     public function newAction(
         Request $request,
         EntityManager $entityManager,
-        LimitChecker $checker
+        LimitChecker $columnLimitChecker,
+        BoardLimitChecker $boardChecker
     ) {
         $card = new Card();
         $form = $this->createForm('AppBundle\Form\CardType', $card);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $cardInBoard = count($entityManager->getRepository('AppBundle:Card')->findAll());
-            $boards = $entityManager->getRepository('AppBundle:Board')->findAll();
 
-            if (count($boards) == 0) {
-                throw new \RuntimeException(
-                    'Oops! No boards found'
-                );
-            }
-
-            $boardConf = $boards[0];
-            if ($cardInBoard >= $boardConf->getWipLimit()) {
-                $this->get('logger')->critical('threshold reached');
+            if ($boardChecker->isBoardLimitReached()) {
                 $this->addFlash('notice', 'wip board limit reached');
                 return $this->redirectToRoute('kanban');
             }
 
-            $limitChecker->setCard($card);
-            if ($limitChecker->isColumnLimitReached($entityManager, $this->get('logger'))) {
+            $columnLimitChecker->setCard($card);
+            if ($columnLimitChecker->isColumnLimitReached($entityManager, $this->get('logger'))) {
                 $this->addFlash('notice', 'wip column limit reached');
                 return $this->redirectToRoute('kanban');
             }
@@ -223,15 +215,15 @@ class CardController extends Controller
         Request $request,
         Card $card,
         EntityManager $entityManager,
-        LimitChecker $limitChecker
+        LimitChecker $columnLimitChecker
     ) {
         $deleteForm = $this->createDeleteForm($card);
         $editForm = $this->createForm('AppBundle\Form\CardType', $card);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $limitChecker->setCard($card);
-            if ($limitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
+            $columnLimitChecker->setCard($card);
+            if ($columnLimitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
                 $this->addFlash('notice', 'wip column limit reached');
                 return $this->redirectToRoute('kanban');
             }
