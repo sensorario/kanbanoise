@@ -18,7 +18,7 @@
                         <td>{{ card.title }}</td>
                         <td>{{ card.type }}</td>
                         <td>{{ card.status }}</td>
-                        <td>{{ card.member }}</td>
+                        <td>{% include 'card/_member.html.twig' with {'card':card} %}</td>
                     </tr>
                 {% endfor %}
                 </table>
