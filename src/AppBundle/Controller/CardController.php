@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Card;
 use AppBundle\UseCase\CardRegression;
+use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -45,6 +46,12 @@ class CardController extends Controller
         foreach ($statuses as $status) {
             if ($nextIsNext == true) {
                 $card->setStatus($status->getName());
+
+                if (static::isColumnLimitReached($manager, $card, $this->get('logger'))) {
+                    $this->addFlash('notice', 'wip column limit reached');
+                    return $this->redirectToRoute('kanban');
+                }
+
                 $manager->persist($card);
                 $manager->flush();
                 return $this->redirectToRoute('kanban');
@@ -155,13 +162,7 @@ class CardController extends Controller
                 return $this->redirectToRoute('kanban');
             }
 
-            $cardInStatus = $entityManager->getRepository('AppBundle:Card')->findby(['status' => $card->getStatus()]);
-            $status = $entityManager->getRepository('AppBundle:Status')->findOneBy(['name' => $card->getStatus()]);
-            $numberOfCardInCurrentStatus = count($cardInStatus);
-            $limitOfCard = $status->getWipLimit();
-            $postStatus = $request->request->get('appbundle_card')['status'];
-            if ($limitOfCard > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
-                $this->get('logger')->critical('threshold reached');
+            if (static::isColumnLimitReached($entityManager, $card, $this->get('logger'))) {
                 $this->addFlash('notice', 'wip column limit reached');
                 return $this->redirectToRoute('kanban');
             }
@@ -222,18 +223,12 @@ class CardController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
-            $cardInStatus = $entityManager->getRepository('AppBundle:Card')->findby(['status' => $card->getStatus()]);
-            $status = $entityManager->getRepository('AppBundle:Status')->findOneBy(['name' => $card->getStatus()]);
-            $numberOfCardInCurrentStatus = count($cardInStatus);
-            $limitOfCard = $status->getWipLimit();
-            $postStatus = $request->request->get('appbundle_card')['status'];
-
-            $this->getDoctrine()->getManager()->flush();
-
-            if ($numberOfCardInCurrentStatus > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
+            if (static::isColumnLimitReached($manager, $card, $this->get('logger'))) {
+                $this->addFlash('notice', 'wip column limit reached');
                 return $this->redirectToRoute('kanban');
             }
+
+            $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('kanban');
         }
@@ -285,5 +280,30 @@ class CardController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    public static function isColumnLimitReached(
+        EntityManager $entityManager,
+        Card $card,
+        LoggerInterface $logger
+    ) {
+        $cardInStatus = $entityManager->getRepository('AppBundle:Card')
+            ->findby(['status' => $card->getStatus()]);
+        $numberOfCardInCurrentStatus = count($cardInStatus);
+
+        $status = $entityManager->getRepository('AppBundle:Status')
+            ->findOneBy(['name' => $card->getStatus()]);
+
+        $status = $entityManager->getRepository('AppBundle:Status')
+            ->findOneBy(['name' => $card->getStatus()]);
+
+        $limitOfCard = $status->getWipLimit();
+
+        if ($limitOfCard > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
+            $logger->critical('threshold reached');
+            return true;
+        }
+
+        return false;
     }
 }
