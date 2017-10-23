@@ -17,13 +17,14 @@ Feature: wip limit
 
     Scenario: board's wip limit
         Given exists a board with wip limit of 1
-        And exists status "todo" with wip limit 42
+        And exists status "in progress" with wip limit 42
+        And exists status "todo" without wip limit
         And exists member "sensorario"
         And exists one card assigned to "sensorario"
         When I go to "/card/new"
         And I fill in "appbundle_card[title]" with "Title"
         And I fill in "appbundle_card[description]" with "description ..."
-        And I select "todo" from "appbundle_card[status]"
+        And I select "in progress" from "appbundle_card[status]"
         And I press "Create"
         Then I go to "/card/new"
         And I fill in "appbundle_card[title]" with "Title"

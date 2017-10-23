@@ -5,6 +5,7 @@ namespace AppBundle\Context;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
 use Kanban\Factories\CardFactory;
+use Kanban\Factories\StatusFactory;
 
 class AppContext implements Context
 {
@@ -79,12 +80,9 @@ class AppContext implements Context
 
     private function buildStatus($name, $wipLimit)
     {
-        $this->status = new \AppBundle\Entity\Status();
-        $this->status->setName($name);
-        $this->status->setPosition(1);
-        $this->status->setWipLimit($wipLimit);
+        $status = StatusFactory::buildWithNameAndWipLimit($name, $wipLimit);
 
-        $this->manager->persist($this->status);
+        $this->manager->persist($status);
         $this->manager->flush();
     }
 
@@ -122,6 +120,17 @@ class AppContext implements Context
         $this->board->setOwner('sensorario');
         $this->board->setWipLimit($wip);
         $this->manager->persist($this->board);
+        $this->manager->flush();
+    }
+
+    /**
+     * @Given exists status :name without wip limit
+     */
+    public function existsStatusWithoutWipLimit($name)
+    {
+        $status = StatusFactory::buildWithNameAndWipLimit($name, null);
+
+        $this->manager->persist($status);
         $this->manager->flush();
     }
 }

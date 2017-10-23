@@ -222,7 +222,7 @@ class CardController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $columnLimitChecker->setCard($card);
-            if ($columnLimitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
+            if ($columnLimitChecker->isColumnLimitReached($entityManager, $this->get('logger'))) {
                 $this->addFlash('notice', 'wip column limit reached');
                 return $this->redirectToRoute('kanban');
             }

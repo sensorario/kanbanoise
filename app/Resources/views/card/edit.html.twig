@@ -12,7 +12,7 @@
             {{ form_end(delete_form) }}
         </li>
         <li>
-            <form name="form" method="post" action="/card/4">
+            <form name="form" method="post" action="/card/{{ card.id }}">
                 <input type="hidden" name="_method" value="CLONE">
                 <input type="submit" value="Clone">
             </form>

@@ -31,7 +31,7 @@ class BoardLimitChecker
 
         $boardConf = $boards[0];
 
-        $cardInBoard = count($this->entityManager->getRepository('AppBundle:Card')->findAll());
+        $cardInBoard = count($this->entityManager->getRepository('AppBundle:Card')->findCountable());
 
         if ($cardInBoard >= $boardConf->getWipLimit()) {
             $this->logger->critical('threshold reached');
