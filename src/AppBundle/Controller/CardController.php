@@ -4,8 +4,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Card;
 use AppBundle\UseCase\CardRegression;
-use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManager;
+use Kanban\Actors\LimitChecker;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -35,9 +36,11 @@ class CardController extends Controller
      * @Route("/kanban/card/{card}/progress", name="card_progress")
      * @Method("GET")
      */
-    public function progressAction(Card $card, EntityManager $manager)
-    {
-        /** @todo implement use case 'CardProgression' */
+    public function progressAction(
+        Card $card,
+        EntityManager $manager,
+        LimitChecker $limitChecker
+    ) {
         $statuses = $manager
             ->getRepository('AppBundle:Status')
             ->findAll();
@@ -47,7 +50,8 @@ class CardController extends Controller
             if ($nextIsNext == true) {
                 $card->setStatus($status->getName());
 
-                if (static::isColumnLimitReached($manager, $card, $this->get('logger'))) {
+                $limitChecker->setCard($card);
+                if ($limitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
                     $this->addFlash('notice', 'wip column limit reached');
                     return $this->redirectToRoute('kanban');
                 }
@@ -139,7 +143,8 @@ class CardController extends Controller
      */
     public function newAction(
         Request $request,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        LimitChecker $checker
     ) {
         $card = new Card();
         $form = $this->createForm('AppBundle\Form\CardType', $card);
@@ -162,7 +167,8 @@ class CardController extends Controller
                 return $this->redirectToRoute('kanban');
             }
 
-            if (static::isColumnLimitReached($entityManager, $card, $this->get('logger'))) {
+            $limitChecker->setCard($card);
+            if ($limitChecker->isColumnLimitReached($entityManager, $this->get('logger'))) {
                 $this->addFlash('notice', 'wip column limit reached');
                 return $this->redirectToRoute('kanban');
             }
@@ -216,14 +222,16 @@ class CardController extends Controller
     public function editAction(
         Request $request,
         Card $card,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        LimitChecker $limitChecker
     ) {
         $deleteForm = $this->createDeleteForm($card);
         $editForm = $this->createForm('AppBundle\Form\CardType', $card);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            if (static::isColumnLimitReached($manager, $card, $this->get('logger'))) {
+            $limitChecker->setCard($card);
+            if ($limitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
                 $this->addFlash('notice', 'wip column limit reached');
                 return $this->redirectToRoute('kanban');
             }
@@ -280,30 +288,5 @@ class CardController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
-    }
-
-    public static function isColumnLimitReached(
-        EntityManager $entityManager,
-        Card $card,
-        LoggerInterface $logger
-    ) {
-        $cardInStatus = $entityManager->getRepository('AppBundle:Card')
-            ->findby(['status' => $card->getStatus()]);
-        $numberOfCardInCurrentStatus = count($cardInStatus);
-
-        $status = $entityManager->getRepository('AppBundle:Status')
-            ->findOneBy(['name' => $card->getStatus()]);
-
-        $status = $entityManager->getRepository('AppBundle:Status')
-            ->findOneBy(['name' => $card->getStatus()]);
-
-        $limitOfCard = $status->getWipLimit();
-
-        if ($limitOfCard > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
-            $logger->critical('threshold reached');
-            return true;
-        }
-
-        return false;
     }
 }
