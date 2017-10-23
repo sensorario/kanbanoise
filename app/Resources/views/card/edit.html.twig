@@ -11,6 +11,12 @@
                 <input type="submit" value="Delete">
             {{ form_end(delete_form) }}
         </li>
+        <li>
+            <form name="form" method="post" action="/card/4">
+                <input type="hidden" name="_method" value="CLONE">
+                <input type="submit" value="Clone">
+            </form>
+        </li>
     </ul>
 
     <form name="appbundle_card" method="post">

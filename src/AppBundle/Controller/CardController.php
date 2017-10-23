@@ -153,7 +153,6 @@ class CardController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             if ($boardChecker->isBoardLimitReached()) {
                 $this->addFlash('notice', 'wip board limit reached');
                 return $this->redirectToRoute('kanban');
@@ -253,6 +252,35 @@ class CardController extends Controller
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
+    }
+
+    /**
+     * @Route("/{id}", name="card_clone")
+     * @Method("CLONE")
+     */
+    public function cloneAction(
+        Request $request,
+        Card $card,
+        EntityManager $manager,
+        LimitChecker $columnLimitChecker,
+        BoardLimitChecker $boardChecker
+    ) {
+        $columnLimitChecker->setCard($card);
+        if ($columnLimitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
+            $this->addFlash('notice', 'wip column limit reached');
+            return $this->redirectToRoute('kanban');
+        }
+
+        if ($boardChecker->isBoardLimitReached()) {
+            $this->addFlash('notice', 'wip board limit reached');
+            return $this->redirectToRoute('kanban');
+        }
+
+        $newCard = clone $card;
+        $manager->persist($newCard);
+        $manager->flush();
+
+        return $this->redirectToRoute('kanban');
     }
 
     /**
