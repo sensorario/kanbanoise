@@ -50,6 +50,13 @@
                 <label for="appbundle_card" class="required">Description</label><textarea id="appbundle_card" name="appbundle_card[description]" required="required"></textarea>
             </div>
             <div>
+                <label for="appbundle_card_project" class="required">Project</label>
+                {% for project in projects %}
+                    <input type="radio" value="{{project.name}}" name="appbundle_card[project]"
+                    {% if project.name == card.project %}checked="checked"{% endif %}> {{project.name}}
+                {% endfor %}
+            </div>
+            <div>
                 <label class="required">Type</label>
                 {% set counter = 0 %}
                 {% for type in types %}

@@ -179,6 +179,10 @@ class CardController extends Controller
             ->getRepository('AppBundle:CardType')
             ->findAll();
 
+        $projects = $entityManager
+            ->getRepository('AppBundle:Project')
+            ->findAll();
+
         $members = $entityManager
             ->getRepository('AppBundle:Member')
             ->findAll();
@@ -186,6 +190,7 @@ class CardController extends Controller
         return $this->render('card/new.html.twig', array(
             'statuses' => $statuses,
             'members'  => $members,
+            'projects' => $projects,
             'types'    => $types,
             'card'     => $card,
             'form'     => $form->createView(),
@@ -213,20 +218,13 @@ class CardController extends Controller
     public function editAction(
         Request $request,
         Card $card,
-        EntityManager $entityManager,
-        LimitChecker $columnLimitChecker
+        EntityManager $entityManager
     ) {
         $deleteForm = $this->createDeleteForm($card);
         $editForm = $this->createForm('AppBundle\Form\CardType', $card);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $columnLimitChecker->setCard($card);
-            if ($columnLimitChecker->isColumnLimitReached($entityManager, $this->get('logger'))) {
-                $this->addFlash('notice', 'wip column limit reached');
-                return $this->redirectToRoute('kanban');
-            }
-
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('kanban');
@@ -240,6 +238,10 @@ class CardController extends Controller
             ->getRepository('AppBundle:CardType')
             ->findAll();
 
+        $projects = $entityManager
+            ->getRepository('AppBundle:Project')
+            ->findAll();
+
         $members = $entityManager
             ->getRepository('AppBundle:Member')
             ->findAll();
@@ -248,6 +250,7 @@ class CardController extends Controller
             'members'     => $members,
             'statuses'    => $statuses,
             'types'       => $types,
+            'projects'    => $projects,
             'card'        => $card,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
