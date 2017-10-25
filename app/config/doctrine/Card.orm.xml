@@ -8,6 +8,7 @@
     <field name="description" type="text" column="description" precision="0" scale="0" nullable="false"/>
     <field name="status" type="string" column="status" length="255" precision="0" scale="0" nullable="false"/>
     <field name="member" type="string" column="member" length="255" precision="0" scale="0" nullable="true"/>
+    <field name="project" type="string" column="project" length="255" precision="0" scale="0" nullable="true"/>
     <field name="type" type="string" column="type" length="255" precision="0" scale="0" nullable="false"/>
     <field name="datetime" type="datetime" column="datetime" length="255" precision="0" scale="0" nullable="true"/>
     <field name="expiration" type="date" column="expiration" length="14" precision="0" scale="0" nullable="true"/>

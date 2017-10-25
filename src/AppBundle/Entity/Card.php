@@ -22,6 +22,8 @@ class Card
 
     private $expiration;
 
+    private $project;
+
     public function __construct()
     {
         $this->expiration = new \DateTime('+1 week');
@@ -108,6 +110,16 @@ class Card
     public function getDatetime()
     {
         return $this->datetime;
+    }
+
+    public function setProject($project)
+    {
+        $this->project = $project;
+    }
+
+    public function getProject()
+    {
+        return $this->project;
     }
 }
 

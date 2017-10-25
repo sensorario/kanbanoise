@@ -74,6 +74,13 @@
                 {% endfor %}
             </div>
             <div>
+                <label for="appbundle_card_project" class="required">Project</label>
+                {% for project in projects %}
+                    <input type="radio" value="{{project.name}}" name="appbundle_card[project]"
+                    {% if project.name == card.project %}checked="checked"{% endif %}> {{project.name}}
+                {% endfor %}
+            </div>
+            <div>
                 <label for="appbundle_card" class="required">Status</label>
 
                 {% for status in statuses %}

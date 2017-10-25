@@ -11,6 +11,9 @@
 		<div class="container">
 			<ul class="nav nav-tabs">
 			  <li class="nav-item">
+				<a class="nav-link {% if app.request.attributes.get('_route') == "project_index" %}active{% endif %}" href="{{ url('project_index') }}">projects</a>
+			  </li>
+			  <li class="nav-item">
 				<a class="nav-link {% if app.request.attributes.get('_route') == "card_index" %}active{% endif %}" href="{{ url('card_index') }}">tasks</a>
 			  </li>
 			  <li class="nav-item">
