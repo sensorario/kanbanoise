@@ -16,7 +16,7 @@ class CardRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('c');
 
         $qb->where('c.status != :status')
-            ->setParameter('status', 'todo');
+            ->setParameter('status', 'done');
 
         return $qb->getQuery()
             ->getResult();
