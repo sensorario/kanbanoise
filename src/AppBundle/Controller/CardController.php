@@ -6,11 +6,13 @@ use AppBundle\Entity\Card;
 use AppBundle\UseCase\CardRegression;
 use Doctrine\ORM\EntityManager;
 use Kanban\Actors\BoardLimitChecker;
+use Kanban\Actors\CardMover;
 use Kanban\Actors\LimitChecker;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -136,6 +138,25 @@ class CardController extends Controller
         return $this->render('card/cards.html.twig', array(
             'cards' => $cards,
         ));
+    }
+
+    /**
+     * @Route("/{card}/move-to/{status}", name="card_move")
+     * @Method({"GET", "POST"})
+     */
+    public function moveAction(
+        Request $request,
+        Card $card,
+        string $status,
+        CardMover $mover
+    ) {
+        $mover->setCard($card);
+        $mover->setStatus($status);
+        $mover->move();
+
+        return new JsonResponse([
+            'success' => true,
+        ]);
     }
 
     /**

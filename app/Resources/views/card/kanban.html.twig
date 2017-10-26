@@ -31,7 +31,7 @@
         </tr>
         <tr>
         {% for status in statuses %}
-            <td class="p-2">
+            <td class="p-2 draggable-column" id="status_{{status.name}}" status-name="{{status.name}}">
                 {% for card in cards[status.name] %}
                     {% include 'card/_card.html.twig' with {'card' : card, 'color' : 'lightblue'} %}
                 {% endfor %}
@@ -40,4 +40,84 @@
         </tr>
       </tbody>
     </table>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+$(function(){
+
+    var $card = null;
+    var $clientX = null;
+    var $clientY = null;
+    var $clientPosition = null;
+    var $cardPosition = null;
+    var $columns = [];
+    var $targetWidth = null;
+    var $finalDestination = null;
+    var $destination = null;
+
+    function resetPositions() {
+        $card = null;
+        $clientX = null;
+        $clientY = null;
+        $clientPosition = null;
+        $cardPosition = null;
+        $targetWidth = null;
+        $finalDestination = null;
+        $destination = null;
+    }
+
+    function loadHosts()
+    {
+        $('.draggable-column').each(function(index) {
+            $columns[this.id] = {
+                left: $(this).position().left,
+                width: $(this).width(),
+                status: $(this).attr('status-name')
+            };
+        });
+    }
+
+    resetPositions();
+    loadHosts();
+
+    $('.card').on('click', function (evt) {
+        if (null != $card) {
+            $card.css('position', 'relative');
+            $('#' + $finalDestination).append('<div class="card m-1">' + $card.html() + '</div>');
+            var cardId = $card.attr('card-id');
+            var url = '/card/' + cardId + '/move-to/' + $destination;
+            $.post(url, function(data) { document.location.reload(); }, 'json');
+            $('#' + evt.currentTarget.id).remove();
+            resetPositions();
+            return;
+        }
+
+        $card = $('#' + evt.currentTarget.id);
+        $clientPosition = { top : evt.clientY, left : evt.clientX };
+        $cardPosition = $('#' + evt.currentTarget.id).position();
+        $targetWidth = $card.width();
+        $card.css('z-index', 9999);
+        $card.css('position', 'absolute');
+        $card.width($targetWidth);
+        $card.css('top', evt.clientY - 5);
+        $card.css('left', evt.clientX - 5);
+    });
+
+    $('body').on('mousemove', function (evt) {
+        if (null == $card) { return; }
+        $card.css('top', evt.clientY - 5);
+        $card.css('left', evt.clientX - 5);
+
+        for (i in $columns) {
+            if (parseInt($card.css('left')) < $columns[i].left + $columns[i].width + 10) {
+                $finalDestination = i;
+                $destination = $columns[i].status;
+                return;
+            }
+        }
+    });
+
+});
+</script>
 {% endblock %}
