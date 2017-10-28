@@ -40,6 +40,9 @@
 			  <li class="nav-item">
 				<a class="nav-link {% if app.request.attributes.get('_route') == "cards" %}active{% endif %}" href="{{ url('cards') }}">cards</a>
 			  </li>
+			  <li class="nav-item">
+				<a class="nav-link {% if app.request.attributes.get('_route') == "settings" %}active{% endif %}" href="{{ url('settings') }}">settings</a>
+			  </li>
 			</ul>
 			<div>&nbsp;</div>
             <div class="text-center">
