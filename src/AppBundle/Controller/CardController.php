@@ -177,16 +177,16 @@ class CardController extends Controller
         LimitChecker $columnLimitChecker,
         BoardLimitChecker $boardChecker
     ) {
+        if ($boardChecker->isBoardLimitReached()) {
+            $this->addFlash('notice', 'wip board limit reached');
+            return $this->redirectToRoute('kanban');
+        }
+
         $card = new Card();
         $form = $this->createForm('AppBundle\Form\CardType', $card);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($boardChecker->isBoardLimitReached()) {
-                $this->addFlash('notice', 'wip board limit reached');
-                return $this->redirectToRoute('kanban');
-            }
-
             $columnLimitChecker->setCard($card);
             if ($columnLimitChecker->isColumnLimitReached($entityManager, $this->get('logger'))) {
                 $this->addFlash('notice', 'wip column limit reached');
