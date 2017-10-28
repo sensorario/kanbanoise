@@ -152,7 +152,15 @@ class CardController extends Controller
     ) {
         $mover->setCard($card);
         $mover->setStatus($status);
-        $mover->move();
+
+        try {
+            $mover->move();
+        } catch(\RuntimeException $exception) {
+            $this->addFlash('notice', 'wip board limit reached');
+            return new JsonResponse([
+                'success' => false,
+            ]);
+        }
 
         return new JsonResponse([
             'success' => true,

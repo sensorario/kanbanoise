@@ -12,9 +12,14 @@ class CardMover
 
     private $persistor;
 
-    public function __construct(Persistor $persistor)
-    {
+    private $columnLimitChecker;
+
+    public function __construct(
+        Persistor $persistor,
+        LimitChecker $columnLimitChecker
+    ) {
         $this->persistor = $persistor;
+        $this->columnLimitChecker = $columnLimitChecker;
     }
 
     public function setCard(Card $card)
@@ -29,6 +34,14 @@ class CardMover
 
     public function move()
     {
+        $this->columnLimitChecker->setFutureStatusName($this->status);
+
+        if ($this->columnLimitChecker->isColumnLimitReached()) {
+            throw new \RuntimeException(
+                'Oops! Limit reached'
+            );
+        }
+
         $this->card->setStatus($this->status);
         $this->persistor->save($this->card);
     }

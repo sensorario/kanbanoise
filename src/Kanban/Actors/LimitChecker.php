@@ -12,6 +12,10 @@ class LimitChecker
 
     private $logger;
 
+    private $futureCardStatus;
+
+    private $card;
+
     public function __construct(
         EntityManager $entityManager,
         LoggerInterface $logger
@@ -25,21 +29,35 @@ class LimitChecker
         $this->card = $card;
     }
 
+    public function setFutureStatusName(string $futureCardStatus)
+    {
+        $this->futureCardStatus = $futureCardStatus;
+    }
+
     public function isColumnLimitReached()
     {
-        /** @todo ensure card is defined */
+        if (null != $this->card) {
+            $futureCardStatus = $this->card->getStatus();
+        } elseif (null != $this->futureCardStatus) {
+            $futureCardStatus = $this->futureCardStatus;
+        } else {
+            throw new \RuntimeException(
+                'Oops! Status is not defined'
+            );
+        }
 
         $cardInStatus = $this->entityManager->getRepository('AppBundle:Card')
-            ->findby(['status' => $this->card->getStatus()]);
+            ->findby(['status' => $futureCardStatus]);
+
         $numberOfCardInCurrentStatus = count($cardInStatus);
 
         $status = $this->entityManager->getRepository('AppBundle:Status')
-            ->findOneBy(['name' => $this->card->getStatus()]);
+            ->findOneBy(['name' => $futureCardStatus]);
 
-        $status = $this->entityManager->getRepository('AppBundle:Status')
-            ->findOneBy(['name' => $this->card->getStatus()]);
+        $statusEntity = $this->entityManager->getRepository('AppBundle:Status')
+            ->findOneBy(['name' => $futureCardStatus]);
 
-        $limitOfCard = $status->getWipLimit();
+        $limitOfCard = $statusEntity->getWipLimit();
 
         if ($limitOfCard > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
             $this->logger->critical('threshold reached');
