@@ -19,12 +19,16 @@ class StatsController extends Controller
     public function regressAction(
         EntityManager $manager
     ) {
-        $numberOfTasks = count($manager->getRepository('AppBundle:Card')->findAll());
         $numberOfBoards = count($manager->getRepository('AppBundle:Board')->findAll());
+        $numberOfMembers = count($manager->getRepository('AppBundle:Member')->findAll());
+        $numberOfProject = count($manager->getRepository('AppBundle:Project')->findAll());
+        $numberOfTasks = count($manager->getRepository('AppBundle:Card')->findAll());
 
         return $this->render('stats/stats.html.twig', [
-            'numberOfTasks' => $numberOfTasks,
             'numberOfBoards' => $numberOfBoards,
+            'numberOfMembers' => $numberOfMembers,
+            'numberOfProject' => $numberOfProject,
+            'numberOfTasks' => $numberOfTasks,
         ]);
     }
 }
