@@ -35,7 +35,11 @@
         {% for status in statuses %}
             <td class="p-2 draggable-column" id="status_{{status.name}}" status-name="{{status.name}}">
                 {% for card in cards[status.name] %}
-                    {% include 'card/_card.html.twig' with {'card' : card, 'color' : 'lightblue'} %}
+                    {% if status.name == 'done' %}
+                        {% include 'card/_card_small.html.twig' with {'card' : card, 'color' : 'lightblue'} %}
+                    {% else %}
+                        {% include 'card/_card.html.twig' with {'card' : card, 'color' : 'lightblue'} %}
+                    {% endif %}
                 {% endfor %}
             </td>
         {% endfor %}
