@@ -11,29 +11,24 @@ class BoardLimitChecker
 
     private $logger;
 
+    private $wipChecker;
+
+    private $counter;
+
     public function __construct(
         EntityManager $entityManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        WipChecker $wipChecker,
+        CardCounter $counter
     ) {
         $this->entityManager = $entityManager;
-        $this->logger = $logger;
+        $this->logger        = $logger;
+        $this->wipChecker    = $wipChecker;
     }
 
     public function isBoardLimitReached()
     {
-        $boards = $this->entityManager->getRepository('AppBundle:Board')->findAll();
-
-        if (count($boards) == 0) {
-            throw new \RuntimeException(
-                'Oops! No boards found'
-            );
-        }
-
-        $boardConf = $boards[0];
-
-        $cardInBoard = count($this->entityManager->getRepository('AppBundle:Card')->findCountable());
-
-        if ($cardInBoard >= $boardConf->getWipLimit()) {
+        if ($this->counter->numberOfCountableCards() >= $this->wipChecker->getBoardWipLimit()) {
             $this->logger->critical('threshold reached');
 
             return true;

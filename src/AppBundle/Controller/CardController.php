@@ -6,8 +6,10 @@ use AppBundle\Entity\Card;
 use AppBundle\UseCase\CardRegression;
 use Doctrine\ORM\EntityManager;
 use Kanban\Actors\BoardLimitChecker;
+use Kanban\Actors\CardCounter;
 use Kanban\Actors\CardMover;
 use Kanban\Actors\LimitChecker;
+use Kanban\Actors\WipChecker;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -77,7 +79,9 @@ class CardController extends Controller
      * @Method("GET")
      */
     public function todoAction(
-        EntityManager $manager
+        EntityManager $manager,
+        WipChecker $wipChecker,
+        CardCounter $cardCounter
     ) {
         $statuses = $manager
             ->getRepository('AppBundle:Status')
@@ -102,9 +106,11 @@ class CardController extends Controller
         }
 
         return $this->render('card/kanban.html.twig', array(
-            'cards'    => $tasks,
-            'bugs'     => $bugs,
-            'statuses' => $statuses,
+            'cards'           => $tasks,
+            'bugs'            => $bugs,
+            'statuses'        => $statuses,
+            'board_wip'       => $wipChecker->getBoardWipLimit(),
+            'number_of_cards' => $cardCounter->numberOfCountableCards(),
         ));
     }
 
