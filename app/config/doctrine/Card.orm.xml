@@ -11,6 +11,7 @@
     <field name="project" type="string" column="project" length="255" precision="0" scale="0" nullable="true"/>
     <field name="type" type="string" column="type" length="255" precision="0" scale="0" nullable="false"/>
     <field name="datetime" type="datetime" column="datetime" length="255" precision="0" scale="0" nullable="true"/>
+    <field name="createdOn" type="datetime" column="createdOn" length="255" precision="0" scale="0" nullable="true"/>
     <field name="expiration" type="date" column="expiration" length="14" precision="0" scale="0" nullable="true"/>
   </entity>
 </doctrine-mapping>
