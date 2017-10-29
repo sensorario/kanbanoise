@@ -11,6 +11,7 @@
                 <th>Status</th>
                 <th>Type</th>
                 <th>Member</th>
+                <th>Owner</th>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
                 <td>{{ card.status }}</td>
                 <td>{{ card.type }}</td>
                 <td>{% include 'card/_member.html.twig' with {'card':card} %}</td>
+                <td>{% include 'card/_owner.html.twig' with {'card':card} %}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -16,6 +16,8 @@ class Card
 
     private $member;
 
+    private $owner;
+
     private $type;
 
     private $datetime;
@@ -92,6 +94,16 @@ class Card
     public function getMember()
     {
         return $this->member;
+    }
+
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    public function getOwner()
+    {
+        return $this->owner;
     }
 
     public function setExpiration($expiration)

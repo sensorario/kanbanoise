@@ -89,11 +89,19 @@
                 {% endfor %}
             </div>
             <div>
-                <label for="appbundle_card" class="required">Member</label>
+                <label for="appbundle_card" class="required">Assigned to : </label>
 
                 {% for member in members %}
                     <input type="radio" value="{{member.name}}" name="appbundle_card[member]"
                     {% if card.member == member.name %}checked="checked"{% endif %}> {{member.name}}
+                {% endfor %}
+            </div>
+            <div>
+                <label for="appbundle_card" class="required">Owned by : </label>
+
+                {% for member in members %}
+                    <input type="radio" value="{{member.name}}" name="appbundle_card[owner]"
+                    {% if card.owner == member.name %}checked="checked"{% endif %}> {{member.name}}
                 {% endfor %}
             </div>
             {{ form_row(edit_form._token) }}
