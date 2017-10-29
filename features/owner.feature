@@ -2,6 +2,7 @@ Feature: members management
 
     Background: no members
         Given the database is clean
+        And exists a board with wip limit of 42
 
     Scenario: Card without member assigned
         And exists one card

@@ -24,6 +24,7 @@ class BoardLimitChecker
         $this->entityManager = $entityManager;
         $this->logger        = $logger;
         $this->wipChecker    = $wipChecker;
+        $this->counter       = $counter;
     }
 
     public function isBoardLimitReached()
