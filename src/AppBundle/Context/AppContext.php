@@ -6,6 +6,7 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
 use Kanban\Factories\CardFactory;
 use Kanban\Factories\StatusFactory;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class AppContext implements Context
 {
@@ -15,6 +16,7 @@ class AppContext implements Context
         $this->kernel->boot();
         $this->container = $this->kernel->getContainer();
         $this->manager = $this->container->get('doctrine.orm.entity_manager');
+        $this->session = $this->container->get('session');
     }
 
     /**
@@ -26,6 +28,7 @@ class AppContext implements Context
         $this->manager->createQuery('delete from AppBundle\Entity\Card')->execute();
         $this->manager->createQuery('delete from AppBundle\Entity\Status')->execute();
         $this->manager->createQuery('delete from AppBundle\Entity\Board')->execute();
+        $this->manager->createQuery('delete from AppBundle\Entity\User')->execute();
     }
 
     /**
@@ -34,6 +37,19 @@ class AppContext implements Context
     public function existsOneCard()
     {
         $this->buildOneCard();
+    }
+
+    /**
+     * @Given exists admin user
+     */
+    public function existsAdminUser()
+    {
+        $admin = new \AppBundle\Entity\User();
+        $admin->setUsername('admin');
+        $admin->setPassword('plain');
+        $admin->setEmail('sensorario@gmail.com');
+        $this->manager->persist($admin);
+        $this->manager->flush();
     }
 
     /**
@@ -132,5 +148,17 @@ class AppContext implements Context
 
         $this->manager->persist($status);
         $this->manager->flush();
+    }
+
+    /**
+     * @Given I am logged in as admin
+     */
+    public function iAmLoggedInAsAdmin()
+    {
+        $admin = $this->manager
+            ->getRepository(\AppBundle\Entity\User::class)
+            ->loadUserByUsername('admin');
+        $token = new UsernamePasswordToken($admin, null, 'main', ['ROLE_ADMIN']);
+        $this->session->set('_security_main', serialize($token));
     }
 }

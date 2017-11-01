@@ -3,6 +3,12 @@ Feature: members management
     Background: no members
         Given the database is clean
         And exists a board with wip limit of 42
+        And exists admin user
+
+        Given I go to "/login"
+        Then I fill in "_username" with "admin"
+        And I fill in "_password" with "bar"
+        And I press "login"
 
     Scenario: Card without member assigned
         And exists one card
