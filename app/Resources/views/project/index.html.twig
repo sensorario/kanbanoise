@@ -7,13 +7,14 @@
         </li>
     </ul>
 
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Owner</th>
                 <th>Name</th>
                 <th>Id</th>
-                <th>Actions</th>
+                <th>Show</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -22,16 +23,8 @@
                 <td><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.owner }}</a></td>
                 <td>{{ project.name }}</td>
                 <td>{{ project.id }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('project_show', { 'id': project.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('project_edit', { 'id': project.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
+                <td><a href="{{ path('project_show', { 'id': project.id }) }}">show</a></td>
+                <td><a href="{{ path('project_edit', { 'id': project.id }) }}">edit</a></td>
             </tr>
         {% endfor %}
         </tbody>

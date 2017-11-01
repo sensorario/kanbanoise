@@ -7,14 +7,15 @@
         </li>
     </ul>
 
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Position</th>
                 <th>Wip Limit</th>
-                <th>Actions</th>
+                <th>Show</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -24,16 +25,8 @@
                 <td>{{ status.name }}</td>
                 <td>{{ status.position }}</td>
                 <td>{{ status.wipLimit is null ? 'no limit' : status.wipLimit }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('status_show', { 'id': status.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('status_edit', { 'id': status.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
+                <td><a href="{{ path('status_show', { 'id': status.id }) }}">show</a></td>
+                <td><a href="{{ path('status_edit', { 'id': status.id }) }}">edit</a></td>
             </tr>
         {% endfor %}
         </tbody>
