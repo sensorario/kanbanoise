@@ -4,23 +4,23 @@
     <div id="wrapper">
         <div id="container">
             <div id="welcome">
-                <table class="table table-bordered">
-                <tr>
-                    <th>id</th>
-                    <th>title</th>
-                    <th>type</th>
-                    <th>status</th>
-                    <th>member</th>
-                </tr>
-                {% for card in userCards %}
+                <table class="table table-bordered table-striped">
                     <tr>
-                        <td>{{ card.id }}</td>
-                        <td>{{ card.title }}</td>
-                        <td>{{ card.type }}</td>
-                        <td>{{ card.status }}</td>
-                        <td>{% include 'card/_member.html.twig' with {'card':card} %}</td>
+                        <th>id</th>
+                        <th>title</th>
+                        <th>type</th>
+                        <th>status</th>
+                        <th>member</th>
                     </tr>
-                {% endfor %}
+                    {% for card in userCards %}
+                        <tr>
+                            <td>{{ card.id }}</td>
+                            <td>{{ card.title }}</td>
+                            <td>{{ card.type }}</td>
+                            <td>{{ card.status }}</td>
+                            <td>{% include 'card/_member.html.twig' with {'card':card} %}</td>
+                        </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>
