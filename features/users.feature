@@ -17,15 +17,3 @@ Feature: members management
         And I press "Create"
         Then the response should contain "sensorario created"
 
-    Scenario: User can create member
-
-        Given I go to "/login"
-        Then I fill in "_username" with "admin"
-        And I fill in "_password" with "bar"
-        And I press "login"
-
-        And I go to "/member/new"
-        When I fill in "Name" with "sensorario"
-        And I press "Create"
-        When I reload the page
-        Then the response should not contain "sensorario created"

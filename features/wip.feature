@@ -2,6 +2,12 @@ Feature: wip limit
 
     Background: clean database
         Given the database is clean
+        And exists admin user
+
+        Given I go to "/login"
+        Then I fill in "_username" with "admin"
+        And I fill in "_password" with "bar"
+        And I press "login"
 
     Scenario: cant exceed wip limit
         Given exists a board with wip limit of 2
