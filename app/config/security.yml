@@ -22,4 +22,5 @@ security:
             provider: my_provider
     access_control:
         - { path: ^/, roles: ROLE_ADMIN }
+        - { path: ^/status, roles: ROLE_ADMIN }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
