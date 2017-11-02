@@ -4,6 +4,11 @@
     <div class="card-text p-1"><strong>~{{card.project}}</strong></div>
     <div class="card-text p-1">{% include 'card/_member.html.twig' with {'card':card} %}</div>
     <div class="card-text p-1">{% include 'card/_owner.html.twig' with {'card':card} %}</div>
+    <div class="card-footer p-1 taglist">
+        {% for tag in card.tags %}
+            #{{tag.name}}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </div>
     <div class="card-footer p-1">
         <span class="text-muted p-1">created : {{card.createdOn|date('d/m/Y')}}</span>
     </div>

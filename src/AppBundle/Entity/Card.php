@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Tag;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 class Card
@@ -28,9 +30,12 @@ class Card
 
     private $createdOn;
 
+    private $tags;
+
     public function __construct()
     {
         $this->expiration = new \DateTime('+1 week');
+        $this->tags = new ArrayCollection();
     }
 
     public function getId()
@@ -144,6 +149,23 @@ class Card
     public function getCreatedOn()
     {
         return $this->createdOn;
+    }
+
+    public function addTag(Tag $tag)
+    {
+        $tag->addCard($this);
+        $this->tags[] = $tag;
+    }
+
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function removeTag(Tag $tag)
+    {
+        $this->tags->removeElement($tag);
+        $tag->removeCard($this);
     }
 }
 

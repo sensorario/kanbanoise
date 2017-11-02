@@ -14,5 +14,6 @@
     <field name="datetime" type="datetime" column="datetime" length="255" precision="0" scale="0" nullable="true"/>
     <field name="createdOn" type="datetime" column="createdOn" length="255" precision="0" scale="0" nullable="true"/>
     <field name="expiration" type="date" column="expiration" length="14" precision="0" scale="0" nullable="true"/>
+    <many-to-many field="tags" target-entity="AppBundle\Entity\Tag" />
   </entity>
 </doctrine-mapping>
