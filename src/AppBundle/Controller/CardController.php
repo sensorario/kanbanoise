@@ -96,6 +96,8 @@ class CardController extends Controller
                 ->findBy([
                     'status' => $status->getName(),
                     'type'   => 'task',
+                ], [
+                    'position' => 'ASC',
                 ]);
 
             $bugs[$status->getName()] = $manager
@@ -103,6 +105,8 @@ class CardController extends Controller
                 ->findBy([
                     'status' => $status->getName(),
                     'type'   => 'bug',
+                ], [
+                    'position' => 'ASC',
                 ]);
         }
 

@@ -75,4 +75,25 @@ class LimitChecker
             );
         }
     }
+
+    public function getHighestPositionNumber()
+    {
+        if (!$this->futureCardStatus) {
+            throw new \RuntimeException(
+                'Oops! Future status is not defined'
+            );
+        }
+
+        $sql = 'select max(c.position) as position ' .
+            'from AppBundle\Entity\Card c ' .
+            'where c.status = \'' . $this->futureCardStatus . '\'';
+
+        $res = $this->entityManager->createQuery($sql)->execute();
+
+        $position = $res[0]['position'];
+
+        $this->logger->critical(' position found : ' . (int) $position);
+
+        return $position;
+    }
 }
