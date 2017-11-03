@@ -9,6 +9,7 @@ use Kanban\Actors\BoardLimitChecker;
 use Kanban\Actors\CardCounter;
 use Kanban\Actors\CardMover;
 use Kanban\Actors\LimitChecker;
+use Kanban\Actors\TagFinder;
 use Kanban\Actors\WipChecker;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -253,7 +254,8 @@ class CardController extends Controller
     public function editAction(
         Request $request,
         Card $card,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        TagFinder $finder
     ) {
         $deleteForm = $this->createDeleteForm($card);
         $editForm = $this->createForm('AppBundle\Form\CardType', $card);
@@ -262,6 +264,31 @@ class CardController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $entityManager->persist($card);
             $entityManager->flush();
+
+
+            foreach ($card->getTags() as $tag) {
+                $tag->removeCard($card);
+                $card->removeTag($tag);
+                $entityManager->persist($tag);
+                $entityManager->persist($card);
+                $entityManager->flush();
+            }
+
+
+            $tags = str_getcsv($request->request->get('tags'));
+            foreach ($tags as $tagName) {
+                if ('' != trim($tagName)) {
+                    if (!$finder->knownTag($tagName)) {
+                        $finder->saveNewTag($tagName);
+                    }
+                    $tag = $finder->catchTagWithName($tagName);
+
+                    $card->addTag($tag);
+                    $entityManager->persist($card);
+                    $entityManager->flush();
+                }
+            }
+
 
             return $this->redirectToRoute('kanban');
         }
@@ -282,12 +309,18 @@ class CardController extends Controller
             ->getRepository('AppBundle:Member')
             ->findAll();
 
+        $tags = [];
+        foreach ($card->getTags()->toArray() as $tag) {
+            $tags[] = $tag->getName();
+        }
+
         return $this->render('card/edit.html.twig', array(
             'members'     => $members,
             'statuses'    => $statuses,
             'types'       => $types,
             'projects'    => $projects,
             'card'        => $card,
+            'tags'        => implode(',', $tags),
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));

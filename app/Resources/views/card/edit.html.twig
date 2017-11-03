@@ -104,9 +104,23 @@
                     {% if card.owner == member.name %}checked="checked"{% endif %}> {{member.name}}
                 {% endfor %}
             </div>
+            <div>
+                <label for="tags" class="required">Tags : </label>
+                <input data-role="tagsinput" value="{{ tags }}" name="tags" id="tags">
+            </div>
             {{ form_row(edit_form._token) }}
         </div>
         <input type="submit" value="Edit">
     </form>
 
+
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+    $(function(){
+        $('#tags).tagsinput();;
+    });
+</script>
 {% endblock %}

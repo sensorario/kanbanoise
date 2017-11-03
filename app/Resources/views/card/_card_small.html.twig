@@ -1,4 +1,9 @@
 <div class="card m-1 draggable" id="card_{{card.id}}" card-id="{{card.id}}">
     <div class="card-header p-1" style="background-color: {{color}};"><a href="{{ url('card_edit', {'id':card.id}) }}">#{{card.id}} - {{card.title}}</a></div>
     <div class="card-text p-1">{{card.description}}</div>
+    <div class="card-footer p-1 taglist">
+        {% for tag in card.tags %}
+            #{{tag.name}}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </div>
 </div>
