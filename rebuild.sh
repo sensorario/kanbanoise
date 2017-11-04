@@ -3,6 +3,8 @@ php ./bin/console doctrine:database:drop --force --env=test
 php ./bin/console doctrine:database:create --env=test
 php ./bin/console doctrine:schema:update --force --env=test
 
+php ./bin/console doctrine:query:sql --env=test "insert into user values (null, 'admin', 'password', 'email', 1);"
+
 php ./bin/console doctrine:query:sql --env=test "insert into member values (null, 'sensorario');"
 
 php ./bin/console doctrine:query:sql --env=test "insert into board values (null, 'sensorario', 4);"
