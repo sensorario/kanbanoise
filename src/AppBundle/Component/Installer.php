@@ -15,7 +15,7 @@ class Installer
     public function verify()
     {
         if (!file_exists(__DIR__ . '/../../../var/data/data.sqlite')) {
-            echo '<li>database non esiste';
+            echo '<li>database not exists';
             echo '<li>php ./bin/console doctrine:database:create';
             die;
         }
@@ -24,7 +24,7 @@ class Installer
             $users = $this->manager->getRepository(\AppBundle\Entity\User::class)
                 ->findAll();
         } catch(\Doctrine\DBAL\Exception\TableNotFoundException $exception) {
-            echo '<li>tabelle non trovate';
+            echo '<li>tables not found';
             echo '<li>php ./bin/console doctrine:schema:update --force';
             die;
         }
@@ -32,7 +32,7 @@ class Installer
         $boards = $this->manager->getRepository(\AppBundle\Entity\Board::class)
             ->findAll();
         if (count($boards) == 0) {
-            echo '<li>nessuna board trovata';
+            echo '<li>no boards found';
             echo '<li>php ./bin/console doctrine:query:sql "insert into board values (null, \'admin\', 4);"';
             die;
         }
@@ -40,7 +40,7 @@ class Installer
         $statuses = $this->manager->getRepository(\AppBundle\Entity\Status::class)
             ->findAll();
         if (count($statuses) == 0) {
-            echo '<li>nessuno stato trovato';
+            echo '<li>no status found';
             echo '<li>php ./bin/console doctrine:query:sql "insert into status values (null, \'todo\', 1, null);"';
             die;
         }
@@ -48,13 +48,13 @@ class Installer
         $cardTypes = $this->manager->getRepository(\AppBundle\Entity\CardType::class)
             ->findAll();
         if (count($cardTypes) == 0) {
-            echo '<li>nessuno stato trovato';
-            echo '<li>php ./bin/console doctrine:query:sql --env=test "insert into card_type values (null, \'task\');"';
+            echo '<li>any card type found';
+            echo '<li>php ./bin/console doctrine:query:sql "insert into card_type values (null, \'task\');"';
             die;
         }
 
         if (count($users) == 0) {
-            echo '<li>nessun utente trovato';
+            echo '<li>no user found';
             echo '<li>php ./bin/console doctrine:query:sql "insert into user values (null, \'admin\', \'password\', \'email\', 1);"';
             die;
         }
