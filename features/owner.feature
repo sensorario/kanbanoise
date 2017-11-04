@@ -4,6 +4,7 @@ Feature: members management
         Given the database is clean
         And exists a board with wip limit of 42
         And exists admin user
+        And exists status todo
 
         Given I go to "/login"
         Then I fill in "_username" with "admin"

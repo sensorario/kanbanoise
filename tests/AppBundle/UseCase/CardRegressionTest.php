@@ -132,6 +132,7 @@ class CardRegressionTest extends TestCase
 
     public function givenDatabaseIsClean()
     {
+        $this->manager->createQuery('delete from AppBundle\Entity\User')->execute();
         $this->manager->createQuery('delete from AppBundle\Entity\Card')->execute();
         $this->manager->createQuery('delete from AppBundle\Entity\Status')->execute();
         $this->manager->flush();

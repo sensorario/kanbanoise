@@ -4,6 +4,7 @@ Feature: members management
         Given the database is clean
         And exists a board with wip limit of 2
         And exists admin user
+        And exists status todo
 
     Scenario: User can create member
 
