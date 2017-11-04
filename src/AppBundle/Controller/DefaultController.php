@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Component\Installer;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,10 +14,14 @@ class DefaultController extends Controller
 {
     private $manager;
 
+    private $installer;
+
     public function __construct(
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
+        Installer $installer
     ) {
-        $this->manager = $manager;
+        $this->manager   = $manager;
+        $this->installer = $installer;
     }
 
     /**
@@ -35,6 +40,8 @@ class DefaultController extends Controller
      */
     public function loginAction(Request $request, AuthenticationUtils $authUtils)
     {
+        $this->installer->verify();
+
         if ($request->getMethod() == 'POST') {
             $username = $request->request->get('_username');
 
