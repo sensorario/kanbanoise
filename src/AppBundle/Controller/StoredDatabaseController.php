@@ -37,9 +37,18 @@ class StoredDatabaseController extends Controller
     public function indexAction()
     {
         $allFiles = scandir(__DIR__ . '/../../../uploads/');
+
+        $filesToHide = [
+            '.',
+            '..',
+            '.DS_Store',
+            '.gitkeep'
+        ];
+
         $storedDatabases = [];
+
         foreach ($allFiles as $itemKey => $itemValue) {
-            if (!in_array($itemValue, ['.', '..', '.DS_Store'])) {
+            if (!in_array($itemValue, $filesToHide)) {
                 $storedDatabases[] = $itemValue;
             }
         }
