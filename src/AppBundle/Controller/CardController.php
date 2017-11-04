@@ -23,6 +23,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CardController extends Controller
 {
+    private $installer;
+
+    public function __construct(
+        \AppBundle\Component\Installer $installer
+    )
+    {
+        $this->installer = $installer;
+    }
+
     /**
      * @Route("/kanban/card/{card}/regress", name="card_regress")
      * @Method("GET")
@@ -84,6 +93,8 @@ class CardController extends Controller
         WipChecker $wipChecker,
         CardCounter $cardCounter
     ) {
+        $this->installer->verify();
+
         $statuses = $manager
             ->getRepository('AppBundle:Status')
             ->findAll();
