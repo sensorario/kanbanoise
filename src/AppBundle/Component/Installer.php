@@ -29,6 +29,30 @@ class Installer
             die;
         }
 
+        $boards = $this->manager->getRepository(\AppBundle\Entity\Board::class)
+            ->findAll();
+        if (count($boards) == 0) {
+            echo '<li>nessuna board trovata';
+            echo '<li>php ./bin/console doctrine:query:sql "insert into board values (null, \'admin\', 4);"';
+            die;
+        }
+
+        $statuses = $this->manager->getRepository(\AppBundle\Entity\Status::class)
+            ->findAll();
+        if (count($statuses) == 0) {
+            echo '<li>nessuno stato trovato';
+            echo '<li>php ./bin/console doctrine:query:sql "insert into status values (null, \'todo\', 1, null);"';
+            die;
+        }
+
+        $cardTypes = $this->manager->getRepository(\AppBundle\Entity\CardType::class)
+            ->findAll();
+        if (count($cardTypes) == 0) {
+            echo '<li>nessuno stato trovato';
+            echo '<li>php ./bin/console doctrine:query:sql --env=test "insert into card_type values (null, \'task\');"';
+            die;
+        }
+
         if (count($users) == 0) {
             echo '<li>nessun utente trovato';
             echo '<li>php ./bin/console doctrine:query:sql "insert into user values (null, \'admin\', \'password\', \'email\', 1);"';
