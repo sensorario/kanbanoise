@@ -32,6 +32,8 @@ class Card
 
     private $tags;
 
+    private $position;
+
     public function __construct()
     {
         $this->expiration = new \DateTime('+1 week');
@@ -166,6 +168,18 @@ class Card
     {
         $this->tags->removeElement($tag);
         $tag->removeCard($this);
+    }
+
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    public function getPosition()
+    {
+        return $this->position;
     }
 }
 
