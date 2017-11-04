@@ -27,7 +27,7 @@ class StoredDatabaseController extends Controller
             __DIR__ . '/../../../var/data/data.sqlite'
         );
 
-        return $this->redirectToRoute('kanban');
+        return $this->redirectToRoute('login');
     }
 
     /**
