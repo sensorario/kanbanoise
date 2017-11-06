@@ -10,7 +10,7 @@ Feature: members management
 
         Given I go to "/login"
         Then I fill in "_username" with "admin"
-        And I fill in "_password" with "bar"
+        And I fill in "_password" with "password"
         And I press "login"
 
         And I go to "/member/new"
