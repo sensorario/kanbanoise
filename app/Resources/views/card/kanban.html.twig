@@ -1,12 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% for message in app.flashes('notice') %}
-        <div class="flash-notice">
-            {{ message }}
-        </div>
-    {% endfor %}
-
     <center>{{ number_of_cards }} di {{ board_wip }}</center>
 
     <table class="table table-bordered" data-fixed-columns="true">

@@ -44,10 +44,14 @@ class DefaultController extends Controller
 
         if ($request->getMethod() == 'POST') {
             $username = $request->request->get('_username');
+            $password = md5($request->request->get('_password'));
 
             $admin = $this->manager
                 ->getRepository(\AppBundle\Entity\User::class)
-                ->loadUserByUsername($username);
+                ->loadUserByUsernameAndPassword(
+                    $username,
+                    $password
+                );
 
             if (null != $admin) {
                 $token = new UsernamePasswordToken($admin, null, 'main', ['ROLE_ADMIN']);
@@ -55,6 +59,8 @@ class DefaultController extends Controller
                 return $this->redirectToRoute('kanban');
             }
         }
+
+        $this->addFlash('notice', 'wrong credentials');
 
         $error = $authUtils->getLastAuthenticationError();
         $lastUsername = $authUtils->getLastUsername();

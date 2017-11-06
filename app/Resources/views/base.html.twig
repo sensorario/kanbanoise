@@ -67,6 +67,12 @@
             <div class="text-center">
                 <a class="github-button" href="https://github.com/sensorario/kanbanoise" data-size="large" data-show-count="true" aria-label="Star sensorario/kanbanoise on GitHub">Star</a>
             </div>
+
+            {% for message in app.flashes('notice') %}
+                <div class="flash-notice">
+                    {{ message }}
+                </div>
+            {% endfor %}
 		</div>
 
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
