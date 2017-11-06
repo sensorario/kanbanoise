@@ -22,7 +22,7 @@ class SettingsController extends Controller
         Request $request
     ) {
         $board = $manager->getRepository('AppBundle:Board')->findOneBy([
-            'owner' => 'sensorario',
+            'owner' => $this->getUser()->getUsername(),
         ]);
 
         $editForm = $this->createForm('AppBundle\Form\BoardType', $board);
