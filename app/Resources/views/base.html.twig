@@ -11,50 +11,58 @@
 		<div>&nbsp;</div>
 		<div class="container">
 			<ul class="nav nav-tabs">
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "project_index" %}active{% endif %}" href="{{ url('project_index') }}">projects</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "card_index" %}active{% endif %}" href="{{ url('card_index') }}">tasks</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "status_index" %}active{% endif %}" href="{{ url('status_index') }}">status</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "member_index" %}active{% endif %}" href="{{ url('member_index') }}">members</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "storeddatabase_index" %}active{% endif %}" href="{{ url('storeddatabase_index') }}">stored database</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "kanban" %}active{% endif %}" href="{{ url('kanban') }}">kanban</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "downloads" %}active{% endif %}" href="{{ url('downloads') }}">downloads</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "stats" %}active{% endif %}" href="{{ url('stats') }}">stats</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "users_stats" %}active{% endif %}" href="{{ url('users_stats', { 'username' : 'sensorario'}) }}">users stats</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "cards" %}active{% endif %}" href="{{ url('cards') }}">cards</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "settings" %}active{% endif %}" href="{{ url('settings') }}">settings</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link {% if app.request.attributes.get('_route') == "logout" %}active{% endif %}" href="{{ url('logout') }}">logout</a>
-			  </li>
+              {% if is_granted("ROLE_USER") %}
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "project_index" %}active{% endif %}" href="{{ url('project_index') }}">projects</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "card_index" %}active{% endif %}" href="{{ url('card_index') }}">tasks</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "status_index" %}active{% endif %}" href="{{ url('status_index') }}">status</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "member_index" %}active{% endif %}" href="{{ url('member_index') }}">members</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "storeddatabase_index" %}active{% endif %}" href="{{ url('storeddatabase_index') }}">stored database</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "kanban" %}active{% endif %}" href="{{ url('kanban') }}">kanban</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "downloads" %}active{% endif %}" href="{{ url('downloads') }}">downloads</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "stats" %}active{% endif %}" href="{{ url('stats') }}">stats</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "users_stats" %}active{% endif %}" href="{{ url('users_stats', { 'username' : app.user.username}) }}">users stats</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "cards" %}active{% endif %}" href="{{ url('cards') }}">cards</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "settings" %}active{% endif %}" href="{{ url('settings') }}">settings</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "logout" %}active{% endif %}" href="{{ url('logout') }}">logout</a>
+                  </li>
+              {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == "login" %}active{% endif %}" href="{{ url('login') }}">login</a>
+                  </li>
+              {% endif %}
 			</ul>
 			<div>&nbsp;</div>
-            <div class="text-center">
-                <a href="{{ path('card_new') }}">new card</a> ] [
-                <a href="https://github.com/sensorario/kanbanoise/projects/1">project</a> |
-                <a href="https://github.com/sensorario/kanbanoise/issues">issues</a> 
-            </div>
-			<div>&nbsp;</div>
+            {% if is_granted("ROLE_USER") %}
+                <div class="text-center">
+                    <a href="{{ path('card_new') }}">new card</a> ] [
+                    <a href="https://github.com/sensorario/kanbanoise/projects/1">project</a> |
+                    <a href="https://github.com/sensorario/kanbanoise/issues">issues</a> 
+                </div>
+			    <div>&nbsp;</div>
+            {% endif %}
 			{% block body %}{% endblock %}
             <div class="text-center">
                 <a class="github-button" href="https://github.com/sensorario/kanbanoise" data-size="large" data-show-count="true" aria-label="Star sensorario/kanbanoise on GitHub">Star</a>
