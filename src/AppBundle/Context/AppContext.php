@@ -4,8 +4,7 @@ namespace AppBundle\Context;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
-use Kanban\Factories\CardFactory;
-use Kanban\Factories\StatusFactory;
+use Kanban\Factories;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class AppContext implements Context
@@ -44,10 +43,8 @@ class AppContext implements Context
      */
     public function existsAdminUser()
     {
-        $admin = new \AppBundle\Entity\User();
-        $admin->setUsername('admin');
-        $admin->setPassword('plain');
-        $admin->setEmail('sensorario@gmail.com');
+        $admin = Factories\UserFactory::buildAdmin();
+
         $this->manager->persist($admin);
         $this->manager->flush();
     }
@@ -78,7 +75,7 @@ class AppContext implements Context
 
     private function buildOneCard() : \AppBundle\Entity\Card
     {
-        $card = CardFactory::buildWithStatus('todo');
+        $card = Factories\CardFactory::buildWithStatus('todo');
 
         $this->manager->persist($card);
         $this->manager->flush();
@@ -96,7 +93,7 @@ class AppContext implements Context
 
     private function buildStatus($name, $wipLimit)
     {
-        $status = StatusFactory::buildWithNameAndWipLimit($name, $wipLimit);
+        $status = Factories\StatusFactory::buildWithNameAndWipLimit($name, $wipLimit);
 
         $this->manager->persist($status);
         $this->manager->flush();
@@ -144,7 +141,7 @@ class AppContext implements Context
      */
     public function existsStatusWithoutWipLimit($name)
     {
-        $status = StatusFactory::buildWithNameAndWipLimit($name, null);
+        $status = Factories\StatusFactory::buildWithNameAndWipLimit($name, null);
 
         $this->manager->persist($status);
         $this->manager->flush();
