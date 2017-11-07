@@ -4,95 +4,139 @@
     <h1>Card creation</h1>
 
     <form name="appbundle_card" method="post">
-        <div id="appbundle_card">
-        <div>
-            <label class="required">Datetime</label>
-            <div id="appbundle_card_datetime" maxlength="255">
-                <div id="appbundle_card_datetime_date">
-                    <select id="appbundle_card_datetime_date_year" name="appbundle_card[datetime][date][year]">
-                    {% for year in range("now"|date('Y'), ("now"|date('Y')) + 1) %}
-                        {% if "now"|date('Y') == year %}
-                            <option selected="selected" value="{{year}}">{{year}}</option>
-                        {% else %}
-                            <option value="{{year}}">{{year}}</option>
-                        {% endif %}
-                    {% endfor %}
-                    </select>
-                    <select id="appbundle_card_datetime_date_month" name="appbundle_card[datetime][date][month]">
-                    {% for month in range(1, 12) %}
-                        {% if "now"|date('m') == month %}
-                            <option selected="selected" value="{{month}}">{{month}}</option>
-                        {% else %}
-                            <option value="{{month}}">{{month}}</option>
-                        {% endif %}
-                    {% endfor %}
-                    </select>
-                    <select id="appbundle_card_datetime_date_day" name="appbundle_card[datetime][date][day]">
-                    {% for day in range(1, 31) %}
-                        {% if "now"|date('d') == day %}
-                            <option selected="selected" value="{{day}}">{{day}}</option>
-                        {% else %}
-                            <option value="{{day}}">{{day}}</option>
-                        {% endif %}
-                    {% endfor %}
-                    </select>
-                </div>
-                <div id="appbundle_card_datetime_time">
-                    <select id="appbundle_card_datetime_time_hour" name="appbundle_card[datetime][time][hour]"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option></select>:<select id="appbundle_card_datetime_time_minute" name="appbundle_card[datetime][time][minute]"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option></select>
-                    </div>
-                </div>
+      <div class="form-row">
+          <div class="form-group col-md-3">
+              <label class="required">Datetime</label>
+              <div id="appbundle_card_datetime">
+                  <div id="appbundle_card_datetime_date">
+                      <select id="appbundle_card_datetime_date_year" name="appbundle_card[datetime][date][year]">
+                      {% for year in range("now"|date('Y'), ("now"|date('Y')) + 1) %}
+                          {% if "now"|date('Y') == year %}
+                              <option selected="selected" value="{{year}}">{{year}}</option>
+                          {% else %}
+                              <option value="{{year}}">{{year}}</option>
+                          {% endif %}
+                      {% endfor %}
+                      </select>
+                      /
+                      <select id="appbundle_card_datetime_date_month" name="appbundle_card[datetime][date][month]">
+                      {% for month in range(1, 12) %}
+                          {% if "now"|date('m') == month %}
+                              <option selected="selected" value="{{month}}">{{month}}</option>
+                          {% else %}
+                              <option value="{{month}}">{{month}}</option>
+                          {% endif %}
+                      {% endfor %}
+                      </select>
+                      /
+                      <select id="appbundle_card_datetime_date_day" name="appbundle_card[datetime][date][day]">
+                      {% for day in range(1, 31) %}
+                          {% if "now"|date('d') == day %}
+                              <option selected="selected" value="{{day}}">{{day}}</option>
+                          {% else %}
+                              <option value="{{day}}">{{day}}</option>
+                          {% endif %}
+                      {% endfor %}
+                      </select>
+                  </div>
+                  <div id="appbundle_card_datetime_time">
+                      <select id="appbundle_card_datetime_time_hour" name="appbundle_card[datetime][time][hour]">
+                      {% for i in 0..23 %}
+                        <option value="{{i}}">
+                          {% if i <= 9 %}0{{i}}{% else %}{{i}}{% endif %}
+                        </option>
+                      {% endfor %}
+                      </select>
+                        :
+                      <select id="appbundle_card_datetime_time_minute" name="appbundle_card[datetime][time][minute]">
+                      {% for i in 0..59 %}
+                        <option value="{{i}}">
+                          {% if i <= 9 %}0{{i}}{% else %}{{i}}{% endif %}
+                        </option>
+                      {% endfor %}
+                      </select>
+                  </div>
+              </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="appbundle_card" class="required">Title</label><br>
+            <input type="text" id="appbundle_card" class="form-control" name="appbundle_card[title]" required="required">
+          </div>
+
+          <div class="form-group col-md-5">
+            <label for="appbundle_card" class="required">Description</label><br>
+            <textarea id="appbundle_card" class="form-control" name="appbundle_card[description]" required="required"></textarea>
+          </div>
+
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          Project :<br>
+          {% for project in projects %}
+            <div class="form-check form-check-inline">
+              <label class="form-check-label required">
+                <input type="radio" class="form-check-input" value="{{project.name}}" name="appbundle_card[project]"
+                {% if project.name == card.project %}checked="checked"{% endif %}> {{project.name}}
+              </label>
             </div>
-            <div>
-                <label for="appbundle_card" class="required">Title</label>
-                <input type="text" id="appbundle_card" name="appbundle_card[title]" required="required" maxlength="255">
-            </div>
-            <div>
-                <label for="appbundle_card" class="required">Description</label><textarea id="appbundle_card" name="appbundle_card[description]" required="required"></textarea>
-            </div>
-            <div>
-                <label for="appbundle_card_project" class="required">Project</label>
-                {% set project_counter = 0 %}
-                {% for project in projects %}
-                    {% set project_counter = project_counter + 1 %}
-                    <input type="radio" value="{{project.name}}" name="appbundle_card[project]"
-                    {% if project_counter == 1 %}checked="checked"{% endif %}> {{project.name}}
-                {% endfor %}
-            </div>
-            <div>
-                <label class="required">Type</label>
-                {% set type_counter = 0 %}
-                {% for type in types %}
-                    {% set type_counter = type_counter + 1 %}
-                    <input type="radio" id="appbundle_card_type_{{type_counter}}" value="{{type.name}}" name="appbundle_card[type]"
-                    {% if type_counter == 1 %}checked="checked"{% endif %}> {{type.name}}
-                {% endfor %}
-            </div>
-            <div>
-                <label class="required">Status</label>
-                {% set status_counter = 0 %}
-                {% for status in statuses %}
-                    {% set status_counter = status_counter + 1 %}
-                        <input type="radio" id="appbundle_card_status_{{status_counter}}" value="{{status.name}}" name="appbundle_card[status]"
-                    {% if status_counter == 1 %}checked="checked"{% endif %}> {{status.name}}
-                {% endfor %}
-            </div>
-            <div>
-                <label class="required">Assigned to</label>
-                {% set member_counter = 0 %}
-                {% for member in members %}
-                    {% set member_counter = member_counter + 1 %}
-                    <input type="radio" id="appbundle_card_member_{{member_counter}}" value="{{member.name}}" name="appbundle_card[member]"
-                    {% if member_counter == 1 %}checked="checked"{% endif %}> {{member.name}}
-                {% endfor %}
-            </div>
-            {{ form_row(form._token) }}
+          {% endfor %}
         </div>
-        <input type="submit" value="Create">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          Type :<br>
+          {% set counter = 0 %}
+          {% for type in types %}
+            <div class="form-check form-check-inline">
+              <label class="form-check-label required">
+                {% set counter = counter + 1 %}
+                <input type="radio" class="form-check-input" id="appbundle_card_type_{{counter}}" value="{{type.name}}" name="appbundle_card[type]"
+                {% if type.name == 'task'%}checked="checked"{% endif %}> {{type.name}}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          Status :<br>
+          {% set counter = 0 %}
+          {% for status in statuses %}
+            <div class="form-check form-check-inline">
+              <label class="form-check-label required">
+                {% set counter = counter + 1 %}
+                <input type="radio" class="form-check-input" id="appbundle_card_status_{{counter}}" value="{{status.name}}" name="appbundle_card[status]"
+                {% if status.name == 'backlog'%}checked="checked"{% endif %}> {{status.name}}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          Assigned to :<br>
+          {% set counter = 0 %}
+          {% for member in members %}
+            <div class="form-check form-check-inline">
+              <label class="form-check-label required">
+                {% set counter = counter + 1 %}
+                <input type="radio" class="form-check-input" id="appbundle_card_member_{{counter}}" value="{{member.name}}" name="appbundle_card[member]"
+                {% if member.name == 'backlog'%}checked="checked"{% endif %}> {{member.name}}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      {{ form_row(form._token) }}
+
+      <input type="submit" class="btn btn-success" value="Create">
+      <a href="{{ path('card_index') }}" class="btn btn-primary">Back to the list</a>
     </form>
 
-    <ul>
-        <li>
-            <a href="{{ path('card_index') }}">Back to the list</a>
-        </li>
-    </ul>
 {% endblock %}
