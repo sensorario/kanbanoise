@@ -4,7 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-class Board
+class Board implements \JsonSerializable
 {
     private $id;
 
@@ -39,6 +39,15 @@ class Board
     public function getWipLimit()
     {
         return $this->wipLimit;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "owner" => $this->getOwner(),
+            "wip_limit" => $this->getWipLimit(),
+        ];
     }
 }
 

@@ -6,8 +6,12 @@ use AppBundle\Entity\Card;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-class Status
+class Status implements \JsonSerializable
 {
+    const TYPE_TASK = 'task';
+
+    const TYPE_BUG = 'bug';
+
     private $id;
 
     private $name;
@@ -31,11 +35,6 @@ class Status
     public function removeCard(Card $card)
     {
         $this->cards->removeElement($card);
-    }
-
-    public function getCards()
-    {
-        return $this->cards;
     }
 
     public static function fromArray(array $params)
@@ -87,14 +86,35 @@ class Status
         return $this->wipLimit;
     }
 
+    public function haveWipLimit()
+    {
+        return null !== $this->getWipLimit();
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'wip_limit' => $this->getWipLimit(),
+        ];
+    }
+
     public function __toString()
     {
         return $this->getName();
     }
 
-    public function haveWipLimit()
+    public function getCards(string $cardType = Status::TYPE_TASK)
     {
-        return null !== $this->getWipLimit();
+        $cards = [];
+
+        foreach ($this->cards as $card) {
+            if ($card->getType() == $cardType) {
+                $cards[] = $card;
+            }
+        }
+
+        return $cards;
     }
 }
-

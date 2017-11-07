@@ -4,7 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-class CardType
+class CardType implements \JsonSerializable
 {
     private $id;
 
@@ -25,5 +25,13 @@ class CardType
     public function getName()
     {
         return $this->name;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "name" => $this->getName(),
+        ];
     }
 }
