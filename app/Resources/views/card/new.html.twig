@@ -51,36 +51,38 @@
             </div>
             <div>
                 <label for="appbundle_card_project" class="required">Project</label>
+                {% set project_counter = 0 %}
                 {% for project in projects %}
+                    {% set project_counter = project_counter + 1 %}
                     <input type="radio" value="{{project.name}}" name="appbundle_card[project]"
-                    {% if project.name == card.project %}checked="checked"{% endif %}> {{project.name}}
+                    {% if project_counter == 1 %}checked="checked"{% endif %}> {{project.name}}
                 {% endfor %}
             </div>
             <div>
                 <label class="required">Type</label>
-                {% set counter = 0 %}
+                {% set type_counter = 0 %}
                 {% for type in types %}
-                    {% set counter = counter + 1 %}
-                    <input type="radio" id="appbundle_card_type_{{counter}}" value="{{type.name}}" name="appbundle_card[type]"
-                    {% if type.name == 'task'%}checked="checked"{% endif %}> {{type.name}}
+                    {% set type_counter = type_counter + 1 %}
+                    <input type="radio" id="appbundle_card_type_{{type_counter}}" value="{{type.name}}" name="appbundle_card[type]"
+                    {% if type_counter == 1 %}checked="checked"{% endif %}> {{type.name}}
                 {% endfor %}
             </div>
             <div>
                 <label class="required">Status</label>
-                {% set counter = 0 %}
+                {% set status_counter = 0 %}
                 {% for status in statuses %}
-                    {% set counter = counter + 1 %}
-                    <input type="radio" id="appbundle_card_status_{{counter}}" value="{{status.name}}" name="appbundle_card[status]"
-                    {% if status.name == 'backlog'%}checked="checked"{% endif %}> {{status.name}}
+                    {% set status_counter = status_counter + 1 %}
+                        <input type="radio" id="appbundle_card_status_{{status_counter}}" value="{{status.name}}" name="appbundle_card[status]"
+                    {% if status_counter == 1 %}checked="checked"{% endif %}> {{status.name}}
                 {% endfor %}
             </div>
             <div>
                 <label class="required">Assigned to</label>
-                {% set counter = 0 %}
+                {% set member_counter = 0 %}
                 {% for member in members %}
-                    {% set counter = counter + 1 %}
-                    <input type="radio" id="appbundle_card_member_{{counter}}" value="{{member.name}}" name="appbundle_card[member]"
-                    {% if member.name == 'backlog'%}checked="checked"{% endif %}> {{member.name}}
+                    {% set member_counter = member_counter + 1 %}
+                    <input type="radio" id="appbundle_card_member_{{member_counter}}" value="{{member.name}}" name="appbundle_card[member]"
+                    {% if member_counter == 1 %}checked="checked"{% endif %}> {{member.name}}
                 {% endfor %}
             </div>
             {{ form_row(form._token) }}
