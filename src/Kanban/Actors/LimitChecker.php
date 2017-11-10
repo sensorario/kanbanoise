@@ -6,6 +6,7 @@ use AppBundle\Entity\Card;
 use Doctrine\ORM\EntityManager;
 use Psr\log\LoggerInterface;
 
+/** @todo add ColumnLimitChecker */
 class LimitChecker
 {
     private $entityManager;
@@ -34,46 +35,60 @@ class LimitChecker
         $this->futureCardStatus = $futureCardStatus;
     }
 
-    public function isColumnLimitReached()
+    /** @todo isColumnLimitReachedForNewCard */
+    /** @todo isColumnLimitReachedForOldCard */
+    /** @todo move this to a collaborator */
+    public function isColumnLimitReached(bool $newCard)
     {
-        if (null != $this->card) {
-            $futureCardStatus = $this->card->getStatus();
-        } elseif (null != $this->futureCardStatus) {
-            $futureCardStatus = $this->futureCardStatus;
-        } else {
-            throw new \RuntimeException(
-                'Oops! Status is not defined'
-            );
+        $this->ensureCardIsDefined();
+
+        if ($newCard) {
+            $this->logger->critical(' new card ');
+
+            $statusName = $this->card->getStatus()->getName();
+            $status = $this->entityManager
+                ->getRepository(\AppBundle\Entity\Status::class)
+                ->findOneBy($criteria = [
+                    'name' => $statusName
+                ]);
+            $columnLimit = $status->getWipLimit();
+            $numberOfCardsInStatus = count($this->entityManager
+                ->getRepository(\AppBundle\Entity\Card::class)
+                ->findBy([
+                    'status' => $status
+                ]));
+
+            $this->logger->critical(var_export([
+                'numberOfCardsInStatus' => $numberOfCardsInStatus,
+                'columnLimit' => $columnLimit,
+            ], true));
+
+            if ($numberOfCardsInStatus < $columnLimit) {
+                return false;
+            }
         }
 
-        $cardInStatus = $this->entityManager->getRepository('AppBundle:Card')
-            ->findby(['status' => $futureCardStatus]);
+        $oldCard = !$newCard;
 
-        $numberOfCardInCurrentStatus = count($cardInStatus);
-
-        $status = $this->entityManager->getRepository('AppBundle:Status')
-            ->findOneBy(['name' => $futureCardStatus]);
-
-        $statusEntity = $this->entityManager->getRepository('AppBundle:Status')
-            ->findOneBy(['name' => $futureCardStatus]);
-
-        $limitOfCard = $statusEntity->getWipLimit();
-
-        if ($limitOfCard > 0 && $limitOfCard <= $numberOfCardInCurrentStatus) {
-            $this->logger->critical('threshold reached');
-            return true;
+        if ($oldCard) {
+            $statusName = $this->futureCardStatus;
+            $status = $this->entityManager
+                ->getRepository(\AppBundle\Entity\Status::class)
+                ->findOneBy($criteria = [
+                    'name' => $statusName
+                ]);
+            $columnLimit = $status->getWipLimit();
+            $numberOfCardsInStatus = count($this->entityManager
+                ->getRepository(\AppBundle\Entity\Card::class)
+                ->findBy([
+                    'status' => $status
+                ]));
+            if ($numberOfCardsInStatus <= $columnLimit) {
+                return false;
+            }
         }
 
-        return false;
-    }
-
-    private function ensureCardIsDefined()
-    {
-        if (!$this->card) {
-            throw new \RuntimeException(
-                'Oops! Card is not defined'
-            );
-        }
+        return true;
     }
 
     public function getHighestPositionNumber()
@@ -84,9 +99,15 @@ class LimitChecker
             );
         }
 
+        $status = $this->entityManager
+            ->getRepository(\AppBundle\Entity\Status::class)
+            ->findOneBy([
+                'name' => $this->futureCardStatus,
+            ]);
+
         $sql = 'select max(c.position) as position ' .
             'from AppBundle\Entity\Card c ' .
-            'where c.status = \'' . $this->futureCardStatus . '\'';
+            'where c.status = \'' . $status->getId() . '\'';
 
         $res = $this->entityManager->createQuery($sql)->execute();
 
@@ -95,5 +116,23 @@ class LimitChecker
         $this->logger->critical(' position found : ' . (int) $position);
 
         return $position;
+    }
+
+    public function ensureFutureStatusIsDefined()
+    {
+        if (!$this->futureCardStatus) {
+            throw new \RuntimeException(
+                'Oops! Future status is not defined'
+            );
+        }
+    }
+
+    private function ensureCardIsDefined()
+    {
+        if (!$this->card) {
+            throw new \RuntimeException(
+                'Oops! Card is not defined'
+            );
+        }
     }
 }

@@ -15,4 +15,9 @@ class StatusFactory
 
         return $status;
     }
+
+    public function createWithName(string $statusName)
+    {
+        return self::buildWithNameAndWipLimit($statusName, null);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Context;
 
+use AppContext\Entity\Status;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
 use Kanban\Factories;
@@ -31,11 +32,19 @@ class AppContext implements Context
     }
 
     /**
-     * @Given exists one card
+     * @Given exists one card with status :statusName
      */
-    public function existsOneCard()
+    public function existsOneCardWithStatus(string $statusName)
     {
-        $this->buildOneCard();
+        $status = $this->catchStatusWithName($statusName);
+
+        if (!$status) {
+            throw new \RuntimeException(
+                'Oops! Status was never created'
+            );
+        }
+
+        $this->buildOneCardWithStatus($status);
     }
 
     /**
@@ -61,21 +70,24 @@ class AppContext implements Context
     }
 
     /**
-     * @Given exists :amount card assigned to :name
+     * @Given exists :amount card with status :statusName assigned to :name
      */
-    public function existSomeCardsAssignedTo($amount, $name)
+    public function existSomeCardsAssignedTo($amount, $statusName, $name)
     {
+        $status = $this->getStatusWithName($statusName);
+
         for ($i = 0; $i <= $amount; $i++) {
-            $card = $this->buildOneCard();
+            $card = $this->buildOneCardWithStatus($status);
             $card->setMember($name);
             $this->manager->persist($card);
             $this->manager->flush();
         }
     }
 
-    private function buildOneCard() : \AppBundle\Entity\Card
-    {
-        $card = Factories\CardFactory::buildWithStatus('todo');
+    private function buildOneCardWithStatus(
+        \AppBundle\Entity\Status $status
+    ) : \AppBundle\Entity\Card {
+        $card = Factories\CardFactory::buildWithStatus($status);
 
         $this->manager->persist($card);
         $this->manager->flush();
@@ -84,11 +96,17 @@ class AppContext implements Context
     }
 
     /**
-     * @Given exists status :arg1
+     * @Given exists status :statusName
      */
-    public function existsStatus($arg1)
+    public function getStatusWithName($statusName)
     {
-        $this->buildStatus('todo', null);
+        $status = $this->catchStatusWithName($statusName);
+
+        if (!$status) {
+            return $this->buildStatus($statusName, null);
+        }
+
+        return $status;
     }
 
     private function buildStatus($name, $wipLimit)
@@ -97,12 +115,14 @@ class AppContext implements Context
 
         $this->manager->persist($status);
         $this->manager->flush();
+
+        return $status;
     }
 
     /**
      * @When exists status :statusName with wip limit :statusWipLimit
      */
-    public function existsStatusWithWipLimit($statusName, $statusWipLimit)
+    public function getStatusWithNameWithWipLimit($statusName, $statusWipLimit)
     {
         $this->buildStatus($statusName, $statusWipLimit);
     }
@@ -139,7 +159,7 @@ class AppContext implements Context
     /**
      * @Given exists status :name without wip limit
      */
-    public function existsStatusWithoutWipLimit($name)
+    public function getStatusWithNameWithoutWipLimit($name)
     {
         $status = Factories\StatusFactory::buildWithNameAndWipLimit($name, null);
 
@@ -157,5 +177,22 @@ class AppContext implements Context
             ->loadUserByUsername('admin');
         $token = new UsernamePasswordToken($admin, null, 'main', ['ROLE_ADMIN']);
         $this->session->set('_security_main', serialize($token));
+    }
+
+    public function catchStatusWithName(string $statusName)
+    {
+        return $this->manager
+            ->getRepository(\AppBundle\Entity\Status::class)
+            ->findOneByName($statusName);
+    }
+
+    /**
+     * @Given the board have limit :wipLimit
+     */
+    public function theBoardHaveLimit($wipLimit)
+    {
+        $this->board->setWipLimit($wipLimit);
+        $this->manager->persist($this->board);
+        $this->manager->flush();
     }
 }

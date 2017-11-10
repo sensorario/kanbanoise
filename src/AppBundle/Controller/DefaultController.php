@@ -58,9 +58,9 @@ class DefaultController extends Controller
                 $this->get('session')->set('_security_main', serialize($token));
                 return $this->redirectToRoute('kanban');
             }
-        }
 
-        $this->addFlash('notice', 'wrong credentials');
+            $this->addFlash('notice', 'wrong credentials');
+        }
 
         $error = $authUtils->getLastAuthenticationError();
         $lastUsername = $authUtils->getLastUsername();

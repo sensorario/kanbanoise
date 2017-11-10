@@ -3,10 +3,11 @@
 namespace Kanban\Factories;
 
 use AppBundle\Entity\Card;
+use AppBundle\Entity\Status;
 
 class CardFactory
 {
-    public static function buildWithStatus(string $status) : Card
+    public static function buildWithStatus(Status $status) : Card
     {
         $card = new Card();
 
@@ -17,5 +18,10 @@ class CardFactory
         $card->setDatetime(new \DateTime('now'));
 
         return $card;
+    }
+
+    public function createWithStatus(Status $status)
+    {
+        return self::buildWithStatus($status);
     }
 }

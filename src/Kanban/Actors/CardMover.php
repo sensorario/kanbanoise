@@ -3,12 +3,13 @@
 namespace Kanban\Actors;
 
 use AppBundle\Entity\Card;
+use AppBundle\Entity\Status;
 
 class CardMover
 {
     private $card;
 
-    private $status;
+    private $futureStatus;
 
     private $persistor;
 
@@ -29,18 +30,21 @@ class CardMover
     public function setCard(Card $card)
     {
         $this->card = $card;
+        $this->columnLimitChecker->setCard($this->card);
     }
 
-    public function setStatus(string $status)
+    public function setFutureStatusName(Status $futureStatus)
     {
-        $this->status = $status;
+        $this->futureStatus = $futureStatus;
     }
 
     public function move()
     {
-        $this->columnLimitChecker->setFutureStatusName($this->status);
+        $statusName = $this->futureStatus->getName();
 
-        if ($this->columnLimitChecker->isColumnLimitReached()) {
+        $this->columnLimitChecker->setFutureStatusName($statusName);
+
+        if ($this->columnLimitChecker->isColumnLimitReached($newCard = false)) {
             throw new \RuntimeException(
                 'Oops! Limit reached'
             );
@@ -48,12 +52,10 @@ class CardMover
 
         $position = $this->columnLimitChecker->getHighestPositionNumber();
 
-        $this->card->setStatus($this->status);
+        $this->card->setStatus($this->futureStatus);
         $this->card->setPosition($position + 1);
         $this->persistor->save($this->card);
 
-        /** @todo reindex cards in column */
-
-        $this->reindexer->reindexColumn($this->status);
+        $this->reindexer->reindexColumn($this->futureStatus);
     }
 }

@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Card;
+use AppBundle\Entity\Status;
+use AppBundle\Responses\KResponse as ResponseBuilder;
 use AppBundle\UseCase\CardRegression;
 use Doctrine\ORM\EntityManager;
 use Kanban\Actors\BoardLimitChecker;
@@ -25,9 +27,7 @@ class CardController extends Controller
 {
     private $installer;
 
-    public function __construct(
-        \AppBundle\Component\Installer $installer
-    )
+    public function __construct(\AppBundle\Component\Installer $installer)
     {
         $this->installer = $installer;
     }
@@ -105,7 +105,7 @@ class CardController extends Controller
             $tasks[$status->getName()] = $manager
                 ->getRepository('AppBundle:Card')
                 ->findBy([
-                    'status' => $status->getName(),
+                    'status' => $status->getId(),
                     'type'   => 'task',
                 ], [
                     'position' => 'ASC',
@@ -114,7 +114,7 @@ class CardController extends Controller
             $bugs[$status->getName()] = $manager
                 ->getRepository('AppBundle:Card')
                 ->findBy([
-                    'status' => $status->getName(),
+                    'status' => $status->getId(),
                     'type'   => 'bug',
                 ], [
                     'position' => 'ASC',
@@ -167,26 +167,23 @@ class CardController extends Controller
      * @Method({"GET", "POST"})
      */
     public function moveAction(
-        Request $request,
         Card $card,
-        string $status,
-        CardMover $mover
+        Status $status,
+        \Kanban\Actors\CardMover $cardMover
     ) {
-        $mover->setCard($card);
-        $mover->setStatus($status);
+        $cardMover->setCard($card);
+        $cardMover->setFutureStatusName($status);
 
         try {
-            $mover->move();
+            $cardMover->move();
         } catch(\RuntimeException $exception) {
-            $this->addFlash('notice', 'wip board limit reached');
-            return new JsonResponse([
-                'success' => false,
-            ]);
+            //$this->addFlash('notice', 'wip board limit reached');
+            //$this->addFlash('notice', $exception->getMessage());
+
+            return ResponseBuilder::createFailure();
         }
 
-        return new JsonResponse([
-            'success' => true,
-        ]);
+        return ResponseBuilder::createSuccess();
     }
 
     /**
@@ -210,7 +207,7 @@ class CardController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $columnLimitChecker->setCard($card);
-            if ($columnLimitChecker->isColumnLimitReached($entityManager, $this->get('logger'))) {
+            if ($columnLimitChecker->isColumnLimitReached($newCard = true)) {
                 $this->addFlash('notice', 'wip column limit reached');
                 return $this->redirectToRoute('kanban');
             }
@@ -353,6 +350,7 @@ class CardController extends Controller
         BoardLimitChecker $boardChecker
     ) {
         $columnLimitChecker->setCard($card);
+
         if ($columnLimitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
             $this->addFlash('notice', 'wip column limit reached');
             return $this->redirectToRoute('kanban');

@@ -18,3 +18,7 @@ services:
     Kanban\Actors\:
         resource: '../../src/Kanban/Actors'
         public: true
+
+    Kanban\Factories\:
+        resource: '../../src/Kanban/Factories'
+        public: true

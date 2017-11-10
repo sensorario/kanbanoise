@@ -47,7 +47,7 @@ class CardRegression
         $position = $status->getPosition() - 1;
         $newStatus = $this->finder->findByPosition($position);
 
-        $this->card->setStatus($newStatus->getName());
+        $this->card->setStatus($newStatus);
         $this->persistor->save($this->card);
 
         return true;
