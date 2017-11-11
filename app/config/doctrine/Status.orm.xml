@@ -7,5 +7,6 @@
     <field name="name" type="string" column="name" length="255" precision="0" scale="0" nullable="false"/>
     <field name="position" type="integer" column="position" precision="0" scale="0" nullable="false"/>
     <field name="wipLimit" type="integer" column="wip_limit" precision="0" scale="0" nullable="true"/>
+    <one-to-many field="cards" target-entity="AppBundle\Entity\Card" mapped-by="status" />
   </entity>
 </doctrine-mapping>

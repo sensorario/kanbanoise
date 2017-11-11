@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Status;
 use AppBundle\Entity\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -69,7 +70,7 @@ class Card
         return $this->description;
     }
 
-    public function setStatus($status)
+    public function setStatus(Status $status)
     {
         $this->status = $status;
 

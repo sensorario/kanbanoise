@@ -60,8 +60,8 @@
           </div>
 
           <div class="form-group col-md-4">
-            <label for="appbundle_card" class="required">Title</label><br>
-            <input type="text" id="appbundle_card" class="form-control" name="appbundle_card[title]" required="required">
+            <label for="appbundle_card_title" class="required">Title</label><br>
+            <input type="text" id="appbundle_card_title" class="form-control" name="appbundle_card[title]" required="required">
           </div>
 
           <div class="form-group col-md-5">
@@ -111,7 +111,7 @@
             <div class="form-check form-check-inline">
               <label class="form-check-label required">
                 {% set status_counter = status_counter + 1 %}
-                <input type="radio" class="form-check-input" id="appbundle_card_status_{{status_counter}}" value="{{status.name}}" name="appbundle_card[status]"
+                <input type="radio" class="form-check-input" id="appbundle_card_status_{{status_counter}}" value="{{status.id}}" name="appbundle_card[status]"
                 {% if status_counter == 1 %}checked="checked"{% endif %}> {{status.name}}
               </label>
             </div>

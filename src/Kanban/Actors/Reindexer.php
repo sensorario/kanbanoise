@@ -3,8 +3,9 @@
 namespace Kanban\Actors;
 
 use AppBundle\Entity\Card;
+use AppBundle\Entity\Status;
 use Doctrine\ORM\EntityManager;
-use Psr\Log\LoggerInterface;
+Use Psr\Log\LoggerInterface;
 
 class Reindexer
 {
@@ -20,12 +21,12 @@ class Reindexer
         $this->logger = $logger;
     }
 
-    public function reindexColumn(string $columnName)
+    public function reindexColumn(Status $status)
     {
         $cards = $this->manager
             ->getRepository(Card::class)
             ->findBy([
-                'status' => $columnName,
+                'status' => $status,
             ], [
                 'position' => 'ASC',
             ]);

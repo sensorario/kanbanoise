@@ -138,8 +138,14 @@ class CardRegressionTest extends TestCase
         $this->manager->flush();
     }
 
-    public function andACardExistsInStatus(string $status)
+    public function andACardExistsInStatus(string $statusName)
     {
+        $status = $this->manager
+            ->getRepository(\AppBundle\Entity\Status::class)
+            ->findOneBy([
+                'name' => $statusName,
+            ]);
+
         $this->card = CardFactory::buildWithStatus($status);
 
         $this->manager->persist($this->card);

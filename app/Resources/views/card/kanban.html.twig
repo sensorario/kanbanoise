@@ -27,7 +27,7 @@
         </tr>
         <tr>
         {% for status in statuses %}
-            <td class="p-2 draggable-column" id="status_{{status.name}}" status-name="{{status.name}}">
+            <td class="p-2 draggable-column" id="status_{{status.name}}" status-id="{{status.id}}">
                 {% for card in cards[status.name] %}
                     {% if status.name == 'done' or status.name == 'Done' %}
                         {% include 'card/_card_small.html.twig' with {'card' : card, 'color' : 'lightblue'} %}
@@ -73,7 +73,7 @@ $(function(){
             $columns[this.id] = {
                 left: $(this).position().left,
                 width: $(this).width(),
-                status: $(this).attr('status-name')
+                status: $(this).attr('status-id')
             };
         });
     }
