@@ -21,16 +21,16 @@ class Fixtures extends Fixture
 
         $defaultStatuses = [[
             'name' => 'Backlog',
-            'wip'  => 0,
+            'wip'  => null,
         ], [
             'name' => 'To Do',
-            'wip'  => 0,
+            'wip'  => null,
         ], [
             'name' => 'In Progress',
             'wip'  => 3,
         ], [
             'name' => 'Done',
-            'wip'  => 0,
+            'wip'  => null,
         ]];
 
         foreach ($defaultStatuses as $itemValue) {
@@ -43,8 +43,12 @@ class Fixtures extends Fixture
             $manager->flush();
         }
 
-        $status = Factories\CardTypeFactory::buildWithName('task');
-        $manager->persist($status);
+        $taskStatus = Factories\CardTypeFactory::buildWithName('task');
+        $manager->persist($taskStatus);
+        $manager->flush();
+
+        $bugStatus = Factories\CardTypeFactory::buildWithName('bug');
+        $manager->persist($bugStatus);
         $manager->flush();
 
         $project = Factories\ProjectFactory::buildWithNameAndOwner('kanbanoise', 'admin');

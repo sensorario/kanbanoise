@@ -91,5 +91,10 @@ class Status
     {
         return $this->getName();
     }
+
+    public function haveWipLimit()
+    {
+        return null !== $this->getWipLimit();
+    }
 }
 

@@ -17,6 +17,7 @@ class AppContext implements Context
         $this->container = $this->kernel->getContainer();
         $this->manager = $this->container->get('doctrine.orm.entity_manager');
         $this->session = $this->container->get('session');
+        $this->logger = $this->container->get('logger');
     }
 
     /**
@@ -43,6 +44,8 @@ class AppContext implements Context
                 'Oops! Status was never created'
             );
         }
+
+        $this->logger->critical($status->getName());
 
         $this->buildOneCardWithStatus($status);
     }
