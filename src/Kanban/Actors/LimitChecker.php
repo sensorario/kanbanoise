@@ -52,6 +52,10 @@ class LimitChecker
                     'name' => $statusName
                 ]);
             $columnLimit = $status->getWipLimit();
+            if (null === $columnLimit) {
+                return false;
+            }
+
             $numberOfCardsInStatus = count($this->entityManager
                 ->getRepository(\AppBundle\Entity\Card::class)
                 ->findBy([
@@ -78,6 +82,10 @@ class LimitChecker
                     'name' => $statusName
                 ]);
             $columnLimit = $status->getWipLimit();
+            if (null === $columnLimit) {
+                return false;
+            }
+
             $numberOfCardsInStatus = count($this->entityManager
                 ->getRepository(\AppBundle\Entity\Card::class)
                 ->findBy([
