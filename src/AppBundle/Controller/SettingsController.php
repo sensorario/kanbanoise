@@ -17,7 +17,7 @@ class SettingsController extends Controller
      * @Route("/settings", name="settings")
      * @Method({"GET", "POST"})
      */
-    public function regressAction(
+    public function settingsAction(
         EntityManager $manager,
         Request $request
     ) {

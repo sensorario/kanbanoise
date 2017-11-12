@@ -5,6 +5,7 @@ default:
       contexts:
           - Behat\MinkExtension\Context\MinkContext
           - AppBundle\Context\AppContext
+          - AppBundle\Context\CssContext
   extensions:
     Behat\MinkExtension:
       show_cmd: open %s

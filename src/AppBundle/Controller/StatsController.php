@@ -16,9 +16,10 @@ class StatsController extends Controller
      * @Route("/stats", name="stats")
      * @Method("GET")
      */
-    public function regressAction(
+    public function statAction(
         EntityManager $manager
     ) {
+        /** @todo replace with single query */
         $numberOfBoards = count($manager->getRepository('AppBundle:Board')->findAll());
         $numberOfMembers = count($manager->getRepository('AppBundle:Member')->findAll());
         $numberOfProject = count($manager->getRepository('AppBundle:Project')->findAll());

@@ -13,8 +13,16 @@
         <span class="text-muted p-1">created : {{card.createdOn|date('d/m/Y')}}</span>
     </div>
     <div class="card-footer p-1">
-        <a class="float-left" href="{{url('card_regress', {'card':card.id})}}">&lt;</a>
+        {% if is_first_card != true %}
+        <span class="back_movement">
+            <a class="float-left" id="back_movement_link" href="{{url('card_regress', {'card':card.id})}}">&lt;</a>
+        </span>
+        {% endif %}
         {% if card.datetime is not null %}<span class="text-muted p-1">expired : {{card.datetime|date('d/m/Y')}}</span>{% endif %}
-        <a class="float-right" href="{{url('card_progress', {'card':card.id})}}">&gt;</a>
+        {% if is_last_card != true %}
+        <span class="forth_movement">
+            <a class="float-right" id="forth_movement_link" href="{{url('card_progress', {'card':card.id})}}">&gt;</a>
+        </span>
+        {% endif %}
     </div>
 </div>

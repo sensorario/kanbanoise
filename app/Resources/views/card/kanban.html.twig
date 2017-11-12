@@ -27,12 +27,19 @@
         </tr>
         <tr>
         {% for status in statuses %}
+            {% set is_first_card = loop.first %}
+            {% set is_last_card = loop.last %}
             <td class="p-2 draggable-column" id="status_{{status.name}}" status-id="{{status.id}}">
-                {% for card in cards[status.name] %}
+                {% for index, card in cards[status.name] %}
                     {% if status.name == 'done' or status.name == 'Done' %}
                         {% include 'card/_card_small.html.twig' with {'card' : card, 'color' : 'lightblue'} %}
                     {% else %}
-                        {% include 'card/_card.html.twig' with {'card' : card, 'color' : 'lightblue'} %}
+                        {% include 'card/_card.html.twig' with {
+                            'card' : card,
+                            'color' : 'lightblue',
+                            'is_first_card' : is_first_card,
+                            'is_last_card' : is_last_card
+                        } %}
                     {% endif %}
                 {% endfor %}
             </td>

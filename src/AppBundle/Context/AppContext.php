@@ -2,11 +2,10 @@
 
 namespace AppBundle\Context;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use AppContext\Entity\Status;
 use Behat\Behat\Context\Context;
-use Behat\Behat\Tester\Exception\PendingException;
 use Kanban\Factories;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class AppContext implements Context
 {
@@ -80,7 +79,8 @@ class AppContext implements Context
         $status = $this->getStatusWithName($statusName);
 
         for ($i = 0; $i <= $amount; $i++) {
-            $card = $this->buildOneCardWithStatus($status);
+            $this->buildOneCardWithStatus($status);
+            $card = $this->getLastBuildedCard();
             $card->setMember($name);
             $this->manager->persist($card);
             $this->manager->flush();
@@ -95,7 +95,14 @@ class AppContext implements Context
         $this->manager->persist($card);
         $this->manager->flush();
 
-        return $card;
+        $this->lastCreatedCard = $card;
+
+        return $this->lastCreatedCard;
+    }
+
+    private function getLastBuildedCard()
+    {
+        return $this->lastCreatedCard;
     }
 
     /**
@@ -170,18 +177,6 @@ class AppContext implements Context
         $this->manager->flush();
     }
 
-    /**
-     * @Given I am logged in as admin
-     */
-    public function iAmLoggedInAsAdmin()
-    {
-        $admin = $this->manager
-            ->getRepository(\AppBundle\Entity\User::class)
-            ->loadUserByUsername('admin');
-        $token = new UsernamePasswordToken($admin, null, 'main', ['ROLE_ADMIN']);
-        $this->session->set('_security_main', serialize($token));
-    }
-
     public function catchStatusWithName(string $statusName)
     {
         return $this->manager
@@ -196,6 +191,36 @@ class AppContext implements Context
     {
         $this->board->setWipLimit($wipLimit);
         $this->manager->persist($this->board);
+        $this->manager->flush();
+    }
+
+    /**
+     * @Then there should be one card in :statusName status
+     */
+    public function thereShouldBeOneCardInStatus($statusName)
+    {
+        $number = count(
+            $this->manager->getRepository(\AppBundle\Entity\Card::class)
+            ->findBy([
+                'status' => $this->catchStatusWithName($statusName),
+            ])
+        );
+
+        if ($number != 1) {
+            throw new \RuntimeException(
+                'Oops! '
+            );
+        }
+    }
+
+    /**
+     * @Given column :statusName have wip limit :limit
+     */
+    public function columnHaveWipLimit($statusName, $limit)
+    {
+        $status = $this->catchStatusWithName($statusName);
+        $status->setWipLimit($limit);
+        $this->manager->persist($status);
         $this->manager->flush();
     }
 }
