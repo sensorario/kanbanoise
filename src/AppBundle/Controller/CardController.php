@@ -5,11 +5,11 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Card;
 use AppBundle\Entity\Status;
 use AppBundle\Responses\KResponse as ResponseBuilder;
-use AppBundle\UseCase\CardRegression;
 use Doctrine\ORM\EntityManager;
 use Kanban\Actors\BoardLimitChecker;
 use Kanban\Actors\CardCounter;
 use Kanban\Actors\CardMover;
+use Kanban\Actors\DestinationFinder;
 use Kanban\Actors\LimitChecker;
 use Kanban\Actors\TagFinder;
 use Kanban\Actors\WipChecker;
@@ -33,62 +33,10 @@ class CardController extends Controller
     }
 
     /**
-     * @Route("/kanban/card/{card}/regress", name="card_regress")
-     * @Method("GET")
-     */
-    public function regressAction(
-        Card $card,
-        EntityManager $manager,
-        CardRegression $cardRegression
-    ) {
-        $cardRegression->setCard($card);
-        $cardRegression->execute();
-
-        return $this->redirectToRoute('kanban');
-    }
-
-    /**
-     * @Route("/kanban/card/{card}/progress", name="card_progress")
-     * @Method("GET")
-     */
-    public function progressAction(
-        Card $card,
-        EntityManager $manager,
-        LimitChecker $columnLimitChecker
-    ) {
-        $statuses = $manager
-            ->getRepository('AppBundle:Status')
-            ->findAll();
-
-        $nextIsNext = false;
-        foreach ($statuses as $status) {
-            if ($nextIsNext == true) {
-                $card->setStatus($status->getName());
-
-                $columnLimitChecker->setCard($card);
-                if ($columnLimitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
-                    $this->addFlash('notice', 'wip column limit reached');
-                    return $this->redirectToRoute('kanban');
-                }
-
-                $manager->persist($card);
-                $manager->flush();
-                return $this->redirectToRoute('kanban');
-            }
-
-            if ($status->getName() == $card->getStatus()) {
-                $nextIsNext = true;
-            }
-        }
-
-        return $this->redirectToRoute('kanban');
-    }
-
-    /**
      * @Route("/kanban", name="kanban")
      * @Method("GET")
      */
-    public function todoAction(
+    public function kanbanAction(
         EntityManager $manager,
         WipChecker $wipChecker,
         CardCounter $cardCounter
@@ -160,30 +108,6 @@ class CardController extends Controller
         return $this->render('card/cards.html.twig', array(
             'cards' => $cards,
         ));
-    }
-
-    /**
-     * @Route("/{card}/move-to/{status}", name="card_move")
-     * @Method({"GET", "POST"})
-     */
-    public function moveAction(
-        Card $card,
-        Status $status,
-        \Kanban\Actors\CardMover $cardMover
-    ) {
-        $cardMover->setCard($card);
-        $cardMover->setFutureStatusName($status);
-
-        try {
-            $cardMover->move();
-        } catch(\RuntimeException $exception) {
-            //$this->addFlash('notice', 'wip board limit reached');
-            //$this->addFlash('notice', $exception->getMessage());
-
-            return ResponseBuilder::createFailure();
-        }
-
-        return ResponseBuilder::createSuccess();
     }
 
     /**
@@ -336,36 +260,6 @@ class CardController extends Controller
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
-    }
-
-    /**
-     * @Route("/{id}", name="card_clone")
-     * @Method("CLONE")
-     */
-    public function cloneAction(
-        Request $request,
-        Card $card,
-        EntityManager $manager,
-        LimitChecker $columnLimitChecker,
-        BoardLimitChecker $boardChecker
-    ) {
-        $columnLimitChecker->setCard($card);
-
-        if ($columnLimitChecker->isColumnLimitReached($manager, $this->get('logger'))) {
-            $this->addFlash('notice', 'wip column limit reached');
-            return $this->redirectToRoute('kanban');
-        }
-
-        if ($boardChecker->isBoardLimitReached()) {
-            $this->addFlash('notice', 'wip board limit reached');
-            return $this->redirectToRoute('kanban');
-        }
-
-        $newCard = clone $card;
-        $manager->persist($newCard);
-        $manager->flush();
-
-        return $this->redirectToRoute('kanban');
     }
 
     /**

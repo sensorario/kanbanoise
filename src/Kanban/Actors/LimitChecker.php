@@ -38,11 +38,11 @@ class LimitChecker
     /** @todo isColumnLimitReachedForNewCard */
     /** @todo isColumnLimitReachedForOldCard */
     /** @todo move this to a collaborator */
-    public function isColumnLimitReached(bool $newCard)
+    public function isColumnLimitReached(bool $newCard, bool $cardCloned = false)
     {
-        $this->ensureCardIsDefined();
-
         if ($newCard) {
+            $this->ensureCardIsDefined();
+
             $this->logger->critical(' new card ');
 
             $statusName = $this->card->getStatus()->getName();
@@ -75,6 +75,8 @@ class LimitChecker
         $oldCard = !$newCard;
 
         if ($oldCard) {
+            $this->ensureFutureStatusIsDefined();
+
             $statusName = $this->futureCardStatus;
             $status = $this->entityManager
                 ->getRepository(\AppBundle\Entity\Status::class)
@@ -91,7 +93,12 @@ class LimitChecker
                 ->findBy([
                     'status' => $status
                 ]));
-            if ($numberOfCardsInStatus <= $columnLimit) {
+
+            if ($numberOfCardsInStatus < $columnLimit) {
+                return false;
+            }
+
+            if ($cardCloned && $numberOfCardsInStatus == $columnLimit) {
                 return false;
             }
         }
