@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,7 +17,7 @@ class UsersStatsController extends Controller
      * @Method("GET")
      */
     public function statsAction(
-        EntityManager $manager,
+        EntityManagerInterface $manager,
         string $username
     ) {
         $userCards = $manager->getRepository('AppBundle:Card')->findBy([

@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Card;
 use AppBundle\Entity\Status;
 use AppBundle\Responses\KResponse as ResponseBuilder;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Kanban\Actors\BoardLimitChecker;
 use Kanban\Actors\CardCounter;
 use Kanban\Actors\CardMover;
@@ -37,7 +37,7 @@ class CardController extends Controller
      * @Method("GET")
      */
     public function kanbanAction(
-        EntityManager $manager,
+        EntityManagerInterface $manager,
         WipChecker $wipChecker,
         CardCounter $cardCounter
     ) {
@@ -116,7 +116,7 @@ class CardController extends Controller
      */
     public function newAction(
         Request $request,
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         LimitChecker $columnLimitChecker,
         BoardLimitChecker $boardChecker
     ) {
@@ -190,7 +190,7 @@ class CardController extends Controller
     public function editAction(
         Request $request,
         Card $card,
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         TagFinder $finder
     ) {
         $deleteForm = $this->createDeleteForm($card);
