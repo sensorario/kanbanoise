@@ -106,7 +106,7 @@
                 <label class="form-check-label required">
                   {% set counter = counter + 1 %}
                   <input type="radio" class="form-check-input" id="appbundle_card_type_{{counter}}" value="{{type.name}}" name="appbundle_card[type]"
-                  {% if type.name == 'task'%}checked="checked"{% endif %}> {{type.name}}
+                  {% if type.name == card.type %}checked="checked"{% endif %}> {{type.name}}
                 </label>
               </div>
             {% endfor %}

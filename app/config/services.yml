@@ -22,3 +22,8 @@ services:
     Kanban\Factories\:
         resource: '../../src/Kanban/Factories'
         public: true
+
+    Kanbanoise\ApiBundle\Controller\:
+        resource: '../../src/Kanbanoise/ApiBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']

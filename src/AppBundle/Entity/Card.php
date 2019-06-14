@@ -7,7 +7,7 @@ use AppBundle\Entity\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-class Card
+class Card implements \JsonSerializable
 {
     private $id;
 
@@ -181,6 +181,17 @@ class Card
     public function getPosition()
     {
         return $this->position;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "title" => $this->getTitle(),
+            "description" => $this->getDescription(),
+            "status" => $this->getStatus(),
+            "type" => $this->getType(),
+        ];
     }
 }
 

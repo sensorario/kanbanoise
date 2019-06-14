@@ -6,7 +6,7 @@ use AppBundle\Entity\Card;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-class Tag
+class Tag implements \JsonSerializable
 {
     private $id;
 
@@ -44,6 +44,19 @@ class Tag
     public function removeCard(Card $card)
     {
         $this->cards->removeElement($card);
+    }
+
+    public function getCards()
+    {
+        return $this->cards;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "name" => $this->getName(),
+        ];
     }
 }
 
